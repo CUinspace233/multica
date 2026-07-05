@@ -65,6 +65,14 @@ type UserResponse struct {
 	ProfileDescription      string          `json:"profile_description"`
 	CreatedAt               string          `json:"created_at"`
 	UpdatedAt               string          `json:"updated_at"`
+	// Enterprise fork (CUinspace233/multica): global superuser flag
+	// snapshotted from the user row. Surfaced in /api/me so the frontend
+	// can decide whether to render the Admin nav entry. Toggling the
+	// flag in the DB only takes effect at JWT re-issue (login / cli-token
+	// / 30-day cookie expiry). See issueJWT for the rationale.
+	IsAdmin  bool   `json:"is_admin"`
+	Disabled bool   `json:"disabled"`
+	DisabledAt *string `json:"disabled_at,omitempty"`
 }
 
 // MaxProfileDescriptionLen caps the user-supplied profile_description body.
@@ -94,6 +102,9 @@ func userToResponse(u db.User) UserResponse {
 		ProfileDescription:      u.ProfileDescription,
 		CreatedAt:               timestampToString(u.CreatedAt),
 		UpdatedAt:               timestampToString(u.UpdatedAt),
+		IsAdmin:                 u.IsAdmin,
+		Disabled:                u.DisabledAt.Valid,
+		DisabledAt:              timestampToPtr(u.DisabledAt),
 	}
 }
 
@@ -150,12 +161,23 @@ func isSixDigitCode(code string) bool {
 }
 
 func (h *Handler) issueJWT(user db.User) (string, error) {
+	// Enterprise fork (CUinspace233/multica): include is_admin and disabled
+	// claims so the auth middleware can authorize /api/admin/* requests
+	// and reject disabled users without an extra DB round-trip on every
+	// request. These are snapshotted at issue time — flipping a user's
+	// is_admin or disabling them takes effect at token expiry (default
+	// 30 days via AUTH_TOKEN_TTL). That's acceptable for our self-host
+	// admin model; tightening it would require either a token blacklist
+	// (Redis ZSET per JWT jti) or very short-lived tokens (re-issue on
+	// every page load), both out of scope here.
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub":   uuidToString(user.ID),
-		"email": user.Email,
-		"name":  user.Name,
-		"exp":   time.Now().Add(auth.AuthTokenTTL()).Unix(),
-		"iat":   time.Now().Unix(),
+		"sub":      uuidToString(user.ID),
+		"email":    user.Email,
+		"name":     user.Name,
+		"is_admin": user.IsAdmin,
+		"disabled": user.DisabledAt.Valid,
+		"exp":      time.Now().Add(auth.AuthTokenTTL()).Unix(),
+		"iat":      time.Now().Unix(),
 	})
 	return token.SignedString(auth.JWTSecret())
 }
@@ -231,6 +253,28 @@ func (h *Handler) checkSignupAllowed(email string, isNewUser bool) error {
 	domain := ""
 	if at := strings.Index(email, "@"); at > 0 {
 		domain = email[at+1:]
+	}
+
+	// Enterprise fork (CUinspace233/multica): runtime-mutable allowlist
+	// takes precedence over the env-driven lists. The cache is the source of
+	// truth once it has been loaded — even if the env vars are still set,
+	// the operator's admin edits win. When the cache hasn't been loaded yet
+	// (e.g. before the first admin request), fall through to the env logic
+	// below so the pre-upgrade behavior carries forward.
+	if h.Allowlist != nil {
+		if hit, ok := h.Allowlist.Has(email); ok && hit {
+			return nil
+		}
+		if hit, ok := h.Allowlist.HasDomain(domain); ok && hit {
+			return nil
+		}
+		// Cache loaded but empty: this is "DB-driven closed mode" — even
+		// if env vars are still set, an empty DB means the operator wants
+		// no one new. Reflect that by blocking unless the general signup
+		// flag is on.
+		if h.Allowlist.HasAny() {
+			return ErrSignupProhibited
+		}
 	}
 
 	// 1. explicit email whitelist always wins

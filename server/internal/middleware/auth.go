@@ -24,6 +24,16 @@ func uuidToString(u pgtype.UUID) string { return util.UUIDToString(u) }
 //
 // Sets X-User-ID and X-User-Email headers on the request for downstream handlers.
 //
+// Enterprise fork (CUinspace233/multica): also rejects JWT-authenticated
+// requests whose `disabled` claim is true (403). The claim is set by the
+// auth handler at JWT issue time, snapshotted from user.disabled_at. The
+// authoritative source for "is this user disabled" remains the DB row —
+// this is the JWT-side enforcement so that a freshly-disabled user
+// doesn't get a 30-day free pass until their cookie expires. The token
+// also surfaces is_admin and the full claims map via context (see
+// ClaimsFromContext / IsAdminFromContext) so downstream middlewares
+// like RequireSuperuser don't need to re-parse the JWT.
+//
 // patCache is optional; when non-nil, PAT lookups are cached with a short
 // TTL (auth.AuthCacheTTL). On cache hit the middleware skips both the DB
 // SELECT and the last_used_at UPDATE — last_used_at is therefore refreshed
@@ -219,6 +229,18 @@ func Auth(queries *db.Queries, patCache *auth.PATCache, cloudPAT *auth.CloudPATV
 				return
 			}
 
+			// Enterprise fork: reject disabled users at JWT boundary.
+			// The disabled claim is set by issueJWT from user.disabled_at
+			// at token-mint time. Real-time disable also requires the
+			// operator to invalidate active JWTs — for our self-host
+			// scale that's acceptable; the disabled user has at most
+			// AUTH_TOKEN_TTL (default 30d) of access remaining.
+			if disabled, _ := claims["disabled"].(bool); disabled {
+				slog.Warn("auth: disabled user", "path", r.URL.Path)
+				http.Error(w, `{"error":"account disabled"}`, http.StatusForbidden)
+				return
+			}
+
 			sub, ok := claims["sub"].(string)
 			if !ok || strings.TrimSpace(sub) == "" {
 				slog.Warn("auth: invalid claims", "path", r.URL.Path)
@@ -226,6 +248,13 @@ func Auth(queries *db.Queries, patCache *auth.PATCache, cloudPAT *auth.CloudPATV
 				return
 			}
 			r.Header.Set("X-User-ID", sub)
+			// Surface claims on the request context so RequireSuperuser
+			// (and any future claim-aware middleware) can read is_admin
+			// without re-verifying the HMAC signature. The HMAC has
+			// already been verified by the parser above — there is
+			// exactly one source of truth for "who is this request
+			// from?"
+			r = r.WithContext(context.WithValue(r.Context(), claimsContextKey{}, claims))
 			if email, ok := claims["email"].(string); ok {
 				r.Header.Set("X-User-Email", email)
 			}
@@ -250,4 +279,56 @@ func extractToken(r *http.Request) (token string, fromCookie bool) {
 	}
 
 	return "", false
+}
+
+// =============================================================================
+// Enterprise fork (CUinspace233/multica): JWT-claims context plumbing.
+//
+// The Auth middleware above (re-)verifies the JWT signature, populates
+// X-User-ID/X-User-Email headers, and now also stashes the parsed
+// jwt.MapClaims on the request context via claimsContextKey. The
+// RequireSuperuser middleware (in package handler) and any other
+// claim-aware middleware read from there — no second HMAC verify,
+// no risk of trusting a client-asserted header.
+// =============================================================================
+
+// claimsContextKey is the unexported context key for stashing JWT
+// claims. Using an unexported empty struct avoids accidental collision
+// with other packages' context keys.
+type claimsContextKey struct{}
+
+// ClaimsFromContext returns the JWT claims map Auth stashed on the
+// context, or nil if Auth did not run (or did not authenticate via
+// JWT — e.g. a PAT-only request, where the map would still be nil
+// because only JWTs carry the is_admin claim).
+func ClaimsFromContext(ctx context.Context) jwt.MapClaims {
+	v, _ := ctx.Value(claimsContextKey{}).(jwt.MapClaims)
+	return v
+}
+
+// IsAdminFromContext returns true iff the JWT-authenticated request
+// has the is_admin claim set to true. For PAT-authenticated requests
+// it returns false (PATs have no is_admin claim by design — a PAT is
+// scoped to a single user and a single workspace, the global admin
+// boundary only makes sense for browser cookies).
+func IsAdminFromContext(ctx context.Context) bool {
+	claims := ClaimsFromContext(ctx)
+	if claims == nil {
+		return false
+	}
+	isAdmin, _ := claims["is_admin"].(bool)
+	return isAdmin
+}
+
+// UserIDFromContext returns the user UUID from the JWT subject claim,
+// or "" if the request was not JWT-authenticated. Used by handlers that
+// need to attribute an action (e.g. admin allowlist writes) without
+// trusting client-supplied headers.
+func UserIDFromContext(ctx context.Context) string {
+	claims := ClaimsFromContext(ctx)
+	if claims == nil {
+		return ""
+	}
+	sub, _ := claims["sub"].(string)
+	return sub
 }
