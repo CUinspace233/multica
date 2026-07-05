@@ -35,6 +35,7 @@ import {
   X,
   Zap,
   Users,
+  ShieldCheck,
 } from "lucide-react";
 import { WorkspaceAvatar } from "../workspace/workspace-avatar";
 import { ActorAvatar } from "@multica/ui/components/common/actor-avatar";
@@ -762,6 +763,31 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
+
+          {/* Enterprise fork (CUinspace233/multica): admin nav link. Gated
+              on user.is_admin so non-superusers never see it. The link
+              targets /admin directly — that route lives in (admin) which
+              is outside the workspace scope, so no workspace slug is
+              required. isActive is a strict prefix match to keep the
+              indicator on while admin sub-routes (future) are mounted. */}
+          {user?.is_admin && (
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu className="gap-0.5">
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      isActive={pathname === "/admin" || pathname.startsWith("/admin/")}
+                      render={<AppLink href="/admin" />}
+                      className="text-muted-foreground hover:not-data-active:bg-sidebar-accent/70 data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground"
+                    >
+                      <ShieldCheck />
+                      <span>{t(($) => $.nav.admin)}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
         </SidebarContent>
 
         <SidebarFooter className="p-2">
