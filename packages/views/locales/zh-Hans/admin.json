@@ -1,0 +1,89 @@
+{
+  "title": "管理",
+  "page_title": "实例管理",
+  "page_subtitle": "管理本实例的用户、工作空间、守护进程和注册白名单。",
+  "groups": {
+    "identity": "实例",
+    "access": "访问控制"
+  },
+  "tabs": {
+    "users": "用户",
+    "workspaces": "工作空间",
+    "runtimes": "守护进程",
+    "access": "访问控制"
+  },
+  "status": {
+    "instance": "实例",
+    "uptime": "运行时长",
+    "signup": "注册",
+    "signup_open": "开放",
+    "signup_closed": "关闭",
+    "allowlist": "白名单",
+    "runtimes": "守护进程",
+    "last_action": "上次管理操作",
+    "last_action_never": "从未"
+  },
+  "users": {
+    "search_placeholder": "按姓名或邮箱搜索",
+    "no_users": "暂无用户。",
+    "role_superuser": "超级管理员",
+    "role_member": "成员",
+    "status_active": "活跃",
+    "status_disabled": "已停用",
+    "promote": "提升为超级管理员",
+    "demote": "降级为成员",
+    "disable": "停用账号",
+    "enable": "启用账号",
+    "copy_id": "复制 ID",
+    "copy_id_done": "ID 已复制",
+    "you_badge": "你",
+    "actions": "操作",
+    "toast_promoted": "已提升为超级管理员",
+    "toast_demoted": "已降级为成员",
+    "toast_disabled": "账号已停用",
+    "toast_enabled": "账号已启用",
+    "toast_failed": "操作失败",
+    "more_actions_aria": "更多操作",
+    "cannot_disable_self_title": "停用自己的账号？",
+    "cannot_disable_self_description": "停用后将无法登录，需其他超级管理员重新启用。",
+    "confirm_disable_self": "仍然停用",
+    "cancel": "取消"
+  },
+  "workspaces": {
+    "search_placeholder": "按名称或 slug 搜索",
+    "no_workspaces": "暂无工作空间。",
+    "members": "{count, plural, =0 {无成员} =1 {1 名成员} other {# 名成员}}",
+    "issues": "{count, plural, =0 {无 Issue} =1 {1 个 Issue} other {# 个 Issue}}"
+  },
+  "runtimes": {
+    "search_placeholder": "按名称或所有者搜索",
+    "no_runtimes": "尚未注册守护进程。",
+    "provider": "提供方",
+    "status_online": "在线",
+    "status_offline": "离线",
+    "owner": "所有者",
+    "last_seen": "上次心跳",
+    "last_seen_never": "从未"
+  },
+  "access": {
+    "emails_title": "允许的邮箱",
+    "emails_desc": "即使注册关闭，列表中的邮箱仍可登录。",
+    "domains_title": "允许的邮箱域名",
+    "domains_desc": "邮箱后缀属于这些域名的用户均可登录。",
+    "email_placeholder": "alice@acme.com",
+    "domain_placeholder": "acme.com",
+    "add_email": "添加邮箱",
+    "add_domain": "添加域名",
+    "no_emails": "未配置邮箱白名单。",
+    "no_domains": "未配置域名白名单。如果注册开放，任何人都可注册。",
+    "invalid_email": "邮箱格式不正确。",
+    "invalid_domain": "域名格式不正确（例如 acme.com）。",
+    "toast_added_email": "邮箱已添加",
+    "toast_added_domain": "域名已添加",
+    "toast_removed": "已删除",
+    "toast_failed": "操作失败",
+    "lockout_title": "清空白名单",
+    "lockout_description": "删除最后一项后，除已注册账号外将无人能登录。继续？",
+    "lockout_confirm": "仍然清空"
+  }
+}

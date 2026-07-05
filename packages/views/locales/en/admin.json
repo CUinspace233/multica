@@ -1,0 +1,89 @@
+{
+  "title": "Admin",
+  "page_title": "Instance admin",
+  "page_subtitle": "Manage users, workspaces, daemon runtimes, and the signup allowlist across this instance.",
+  "groups": {
+    "identity": "Instance",
+    "access": "Access control"
+  },
+  "tabs": {
+    "users": "Users",
+    "workspaces": "Workspaces",
+    "runtimes": "Runtimes",
+    "access": "Access"
+  },
+  "status": {
+    "instance": "Instance",
+    "uptime": "Uptime",
+    "signup": "Signup",
+    "signup_open": "Open",
+    "signup_closed": "Closed",
+    "allowlist": "Allowlist",
+    "runtimes": "Runtimes",
+    "last_action": "Last admin action",
+    "last_action_never": "never"
+  },
+  "users": {
+    "search_placeholder": "Search by name or email",
+    "no_users": "No users yet.",
+    "role_superuser": "Superuser",
+    "role_member": "Member",
+    "status_active": "Active",
+    "status_disabled": "Disabled",
+    "promote": "Promote to superuser",
+    "demote": "Demote to member",
+    "disable": "Disable account",
+    "enable": "Enable account",
+    "copy_id": "Copy ID",
+    "copy_id_done": "ID copied",
+    "you_badge": "you",
+    "actions": "Actions",
+    "toast_promoted": "Promoted to superuser",
+    "toast_demoted": "Demoted to member",
+    "toast_disabled": "Account disabled",
+    "toast_enabled": "Account enabled",
+    "toast_failed": "Action failed",
+    "more_actions_aria": "More actions",
+    "cannot_disable_self_title": "Disable your own account?",
+    "cannot_disable_self_description": "Disabling yourself will lock you out. Ask another superuser to re-enable you.",
+    "confirm_disable_self": "Disable anyway",
+    "cancel": "Cancel"
+  },
+  "workspaces": {
+    "search_placeholder": "Search by name or slug",
+    "no_workspaces": "No workspaces yet.",
+    "members": "{count, plural, =0 {No members} =1 {1 member} other {# members}}",
+    "issues": "{count, plural, =0 {No issues} =1 {1 issue} other {# issues}}"
+  },
+  "runtimes": {
+    "search_placeholder": "Search by name or owner",
+    "no_runtimes": "No daemon runtimes registered.",
+    "provider": "Provider",
+    "status_online": "Online",
+    "status_offline": "Offline",
+    "owner": "Owner",
+    "last_seen": "Last seen",
+    "last_seen_never": "never"
+  },
+  "access": {
+    "emails_title": "Allowed emails",
+    "emails_desc": "Addresses on this list can sign in even when signup is closed.",
+    "domains_title": "Allowed email domains",
+    "domains_desc": "Anyone with an email at one of these domains can sign in.",
+    "email_placeholder": "alice@acme.com",
+    "domain_placeholder": "acme.com",
+    "add_email": "Add email",
+    "add_domain": "Add domain",
+    "no_emails": "No specific emails allowlisted.",
+    "no_domains": "No domain allowlist. Anyone can sign up if signup is open.",
+    "invalid_email": "That doesn't look like an email address.",
+    "invalid_domain": "That doesn't look like a domain (try acme.com).",
+    "toast_added_email": "Email added",
+    "toast_added_domain": "Domain added",
+    "toast_removed": "Removed",
+    "toast_failed": "Action failed",
+    "lockout_title": "Empty allowlist",
+    "lockout_description": "Removing the last entry will lock everyone out except existing accounts. Continue?",
+    "lockout_confirm": "Empty allowlist"
+  }
+}
