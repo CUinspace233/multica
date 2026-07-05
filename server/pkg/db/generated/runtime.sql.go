@@ -121,6 +121,17 @@ func (q *Queries) CountActiveSquadsWithArchivedLeadersByRuntime(ctx context.Cont
 	return count, err
 }
 
+const countAllRuntimes = `-- name: CountAllRuntimes :one
+SELECT count(*)::bigint FROM agent_runtime
+`
+
+func (q *Queries) CountAllRuntimes(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countAllRuntimes)
+	var column_1 int64
+	err := row.Scan(&column_1)
+	return column_1, err
+}
+
 const deleteAgentRuntime = `-- name: DeleteAgentRuntime :exec
 DELETE FROM agent_runtime WHERE id = $1
 `
@@ -519,6 +530,76 @@ func (q *Queries) ListAgentRuntimesByOwner(ctx context.Context, arg ListAgentRun
 			&i.LegacyDaemonID,
 			&i.Visibility,
 			&i.ProfileID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listAllRuntimesAdmin = `-- name: ListAllRuntimesAdmin :many
+
+SELECT
+    r.id, r.workspace_id, r.owner_id, r.daemon_id, r.name,
+    r.provider, r.status, r.last_seen_at, r.created_at, r.updated_at,
+    u.email AS owner_email
+FROM agent_runtime r
+LEFT JOIN "user" u ON u.id = r.owner_id
+ORDER BY r.created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListAllRuntimesAdminParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type ListAllRuntimesAdminRow struct {
+	ID          pgtype.UUID        `json:"id"`
+	WorkspaceID pgtype.UUID        `json:"workspace_id"`
+	OwnerID     pgtype.UUID        `json:"owner_id"`
+	DaemonID    pgtype.Text        `json:"daemon_id"`
+	Name        string             `json:"name"`
+	Provider    string             `json:"provider"`
+	Status      string             `json:"status"`
+	LastSeenAt  pgtype.Timestamptz `json:"last_seen_at"`
+	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `json:"updated_at"`
+	OwnerEmail  pgtype.Text        `json:"owner_email"`
+}
+
+// =============================================================================
+// Enterprise fork (CUinspace233/multica): global admin queries.
+// =============================================================================
+// Lists every daemon-registered runtime across all workspaces for the
+// admin dashboard. Includes the owning user email (LEFT JOIN since a
+// runtime can outlive its owner's deleted account via ON DELETE SET
+// NULL on agent_runtime.owner_id). Pagination in the handler.
+func (q *Queries) ListAllRuntimesAdmin(ctx context.Context, arg ListAllRuntimesAdminParams) ([]ListAllRuntimesAdminRow, error) {
+	rows, err := q.db.Query(ctx, listAllRuntimesAdmin, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListAllRuntimesAdminRow{}
+	for rows.Next() {
+		var i ListAllRuntimesAdminRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.WorkspaceID,
+			&i.OwnerID,
+			&i.DaemonID,
+			&i.Name,
+			&i.Provider,
+			&i.Status,
+			&i.LastSeenAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.OwnerEmail,
 		); err != nil {
 			return nil, err
 		}

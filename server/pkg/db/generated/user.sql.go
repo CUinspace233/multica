@@ -11,10 +11,72 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const adminSearchUsers = `-- name: AdminSearchUsers :many
+SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at FROM "user"
+WHERE name ILIKE '%' || $1 || '%' OR email ILIKE '%' || $1 || '%'
+ORDER BY created_at DESC
+LIMIT $2
+`
+
+type AdminSearchUsersParams struct {
+	Column1 pgtype.Text `json:"column_1"`
+	Limit   int32       `json:"limit"`
+}
+
+// Case-insensitive substring search across name and email. The admin
+// UI search box hits this with LIMIT 50 hard-capped.
+func (q *Queries) AdminSearchUsers(ctx context.Context, arg AdminSearchUsersParams) ([]User, error) {
+	rows, err := q.db.Query(ctx, adminSearchUsers, arg.Column1, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []User{}
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Email,
+			&i.AvatarUrl,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.OnboardedAt,
+			&i.OnboardingQuestionnaire,
+			&i.CloudWaitlistEmail,
+			&i.CloudWaitlistReason,
+			&i.StarterContentState,
+			&i.Language,
+			&i.ProfileDescription,
+			&i.Timezone,
+			&i.IsAdmin,
+			&i.DisabledAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const countAllUsers = `-- name: CountAllUsers :one
+SELECT count(*)::bigint FROM "user"
+`
+
+func (q *Queries) CountAllUsers(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countAllUsers)
+	var column_1 int64
+	err := row.Scan(&column_1)
+	return column_1, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO "user" (name, email, avatar_url)
 VALUES ($1, $2, $3)
-RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
 `
 
 type CreateUserParams struct {
@@ -41,12 +103,14 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone FROM "user"
+SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at FROM "user"
 WHERE id = $1
 `
 
@@ -68,12 +132,14 @@ func (q *Queries) GetUser(ctx context.Context, id pgtype.UUID) (User, error) {
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone FROM "user"
+SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at FROM "user"
 WHERE email = $1
 `
 
@@ -95,6 +161,39 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
+	)
+	return i, err
+}
+
+const getUserByIDAdmin = `-- name: GetUserByIDAdmin :one
+SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at FROM "user"
+WHERE id = $1
+`
+
+// Single-row lookup, identical to GetUser but scoped to the admin
+// handler path so the call site signals intent. Same row shape.
+func (q *Queries) GetUserByIDAdmin(ctx context.Context, id pgtype.UUID) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByIDAdmin, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.AvatarUrl,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.OnboardedAt,
+		&i.OnboardingQuestionnaire,
+		&i.CloudWaitlistEmail,
+		&i.CloudWaitlistReason,
+		&i.StarterContentState,
+		&i.Language,
+		&i.ProfileDescription,
+		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }
@@ -105,7 +204,7 @@ UPDATE "user" SET
     cloud_waitlist_reason = $3,
     updated_at = now()
 WHERE id = $1
-RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
 `
 
 type JoinCloudWaitlistParams struct {
@@ -135,8 +234,70 @@ func (q *Queries) JoinCloudWaitlist(ctx context.Context, arg JoinCloudWaitlistPa
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
+}
+
+const listAllUsersAdmin = `-- name: ListAllUsersAdmin :many
+
+SELECT id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at FROM "user"
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListAllUsersAdminParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+// =============================================================================
+// Enterprise fork (CUinspace233/multica): global superuser queries.
+// The `user.is_admin` and `user.disabled_at` columns are added by
+// migration 134. Upstream multica only has per-workspace admin roles
+// (see server/pkg/db/queries/member.sql) — these queries let a global
+// admin list/manage all users across workspaces.
+// =============================================================================
+// Lists every user in the database, newest first, paginated. The admin
+// UI uses this to render the users table. Caller passes an inclusive
+// LIMIT (defaults applied in the handler) and OFFSET (clamped to the
+// count). No filtering yet — search-by-email will land in a follow-up.
+func (q *Queries) ListAllUsersAdmin(ctx context.Context, arg ListAllUsersAdminParams) ([]User, error) {
+	rows, err := q.db.Query(ctx, listAllUsersAdmin, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []User{}
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Email,
+			&i.AvatarUrl,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.OnboardedAt,
+			&i.OnboardingQuestionnaire,
+			&i.CloudWaitlistEmail,
+			&i.CloudWaitlistReason,
+			&i.StarterContentState,
+			&i.Language,
+			&i.ProfileDescription,
+			&i.Timezone,
+			&i.IsAdmin,
+			&i.DisabledAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const markUserOnboarded = `-- name: MarkUserOnboarded :one
@@ -144,7 +305,7 @@ UPDATE "user" SET
     onboarded_at = COALESCE(onboarded_at, now()),
     updated_at = now()
 WHERE id = $1
-RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
 `
 
 func (q *Queries) MarkUserOnboarded(ctx context.Context, id pgtype.UUID) (User, error) {
@@ -165,6 +326,8 @@ func (q *Queries) MarkUserOnboarded(ctx context.Context, id pgtype.UUID) (User, 
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }
@@ -174,7 +337,7 @@ UPDATE "user" SET
     onboarding_questionnaire = COALESCE($1, onboarding_questionnaire),
     updated_at = now()
 WHERE id = $2
-RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
 `
 
 type PatchUserOnboardingParams struct {
@@ -204,6 +367,8 @@ func (q *Queries) PatchUserOnboarding(ctx context.Context, arg PatchUserOnboardi
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }
@@ -213,7 +378,7 @@ UPDATE "user" SET
     starter_content_state = $2,
     updated_at = now()
 WHERE id = $1
-RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
 `
 
 type SetStarterContentStateParams struct {
@@ -244,6 +409,94 @@ func (q *Queries) SetStarterContentState(ctx context.Context, arg SetStarterCont
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
+	)
+	return i, err
+}
+
+const setUserAdmin = `-- name: SetUserAdmin :one
+UPDATE "user" SET
+    is_admin = $2,
+    updated_at = now()
+WHERE id = $1
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
+`
+
+type SetUserAdminParams struct {
+	ID      pgtype.UUID `json:"id"`
+	IsAdmin bool        `json:"is_admin"`
+}
+
+// Promotes or demotes a user to/from the global superuser role. Used by
+// the admin UI "Make admin" / "Remove admin" buttons, and also kept
+// available for SQL-only one-off promotes during initial setup. The
+// handler additionally enforces that the *caller* is already an admin
+// (RequireSuperuser middleware) before reaching this query.
+func (q *Queries) SetUserAdmin(ctx context.Context, arg SetUserAdminParams) (User, error) {
+	row := q.db.QueryRow(ctx, setUserAdmin, arg.ID, arg.IsAdmin)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.AvatarUrl,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.OnboardedAt,
+		&i.OnboardingQuestionnaire,
+		&i.CloudWaitlistEmail,
+		&i.CloudWaitlistReason,
+		&i.StarterContentState,
+		&i.Language,
+		&i.ProfileDescription,
+		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
+	)
+	return i, err
+}
+
+const setUserDisabled = `-- name: SetUserDisabled :one
+UPDATE "user" SET
+    disabled_at = CASE WHEN $2 THEN now() ELSE NULL END,
+    updated_at = now()
+WHERE id = $1
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
+`
+
+type SetUserDisabledParams struct {
+	ID         pgtype.UUID        `json:"id"`
+	DisabledAt pgtype.Timestamptz `json:"disabled_at"`
+}
+
+// Soft-disables a user account. When $2 is true, sets disabled_at to
+// the current time; when false, clears it. The middleware reads
+// disabled_at and rejects requests with 403 if it's set, but disabling
+// does NOT delete the row — the user's workspaces, issues, comments,
+// and chat history stay intact. Revoking all session cookies is the
+// handler's job (it walks the auth_session table; see also the
+// `auth_session` cleanup hook in the admin handler).
+func (q *Queries) SetUserDisabled(ctx context.Context, arg SetUserDisabledParams) (User, error) {
+	row := q.db.QueryRow(ctx, setUserDisabled, arg.ID, arg.DisabledAt)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.AvatarUrl,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.OnboardedAt,
+		&i.OnboardingQuestionnaire,
+		&i.CloudWaitlistEmail,
+		&i.CloudWaitlistReason,
+		&i.StarterContentState,
+		&i.Language,
+		&i.ProfileDescription,
+		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }
@@ -261,7 +514,7 @@ UPDATE "user" SET
     END,
     updated_at = now()
 WHERE id = $1
-RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone
+RETURNING id, name, email, avatar_url, created_at, updated_at, onboarded_at, onboarding_questionnaire, cloud_waitlist_email, cloud_waitlist_reason, starter_content_state, language, profile_description, timezone, is_admin, disabled_at
 `
 
 type UpdateUserParams struct {
@@ -310,6 +563,8 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.Language,
 		&i.ProfileDescription,
 		&i.Timezone,
+		&i.IsAdmin,
+		&i.DisabledAt,
 	)
 	return i, err
 }

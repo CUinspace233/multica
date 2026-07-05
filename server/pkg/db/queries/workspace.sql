@@ -50,3 +50,23 @@ WITH deleted_pending_check_suites AS (
     DELETE FROM github_pending_check_suite WHERE workspace_id = $1
 )
 DELETE FROM workspace WHERE id = $1;
+
+-- =============================================================================
+-- Enterprise fork (CUinspace233/multica): global admin queries.
+-- =============================================================================
+
+-- name: ListAllWorkspacesAdmin :many
+-- Lists every workspace across all users for the admin dashboard,
+-- newest first, plus the member count for each. The admin UI uses
+-- this to render the workspaces table. Pagination handled in the
+-- handler.
+SELECT
+    w.id, w.name, w.slug, w.description, w.created_at, w.updated_at,
+    w.issue_prefix, w.issue_counter, w.avatar_url,
+    (SELECT count(*)::bigint FROM member m WHERE m.workspace_id = w.id) AS member_count
+FROM workspace w
+ORDER BY w.created_at DESC
+LIMIT $1 OFFSET $2;
+
+-- name: CountAllWorkspaces :one
+SELECT count(*)::bigint FROM workspace;
