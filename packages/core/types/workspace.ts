@@ -61,6 +61,14 @@ export interface User {
   timezone: string | null;
   created_at: string;
   updated_at: string;
+  // Enterprise fork (CUinspace233/multica): global superuser flag from
+  // migration 134 + soft-disable timestamp. The server always returns
+  // these — undefined means the request was made before the fork was
+  // deployed and the caller should fall back to treating the user as a
+  // regular member.
+  is_admin?: boolean;
+  disabled?: boolean;
+  disabled_at?: string | null;
 }
 
 export interface MemberWithUser {
