@@ -7,13 +7,13 @@
     "period_label": "Period"
   },
   "kpi": {
-    "cost_label": "Cost · {{days}}D",
-    "tokens_label": "Tokens · {{days}}D",
-    "tokens_hint": "Input {{input}} · Output {{output}}",
-    "run_time_label": "Run time · {{days}}D",
-    "run_time_hint": "Across {{tasks}} tasks",
-    "tasks_label": "Tasks · {{days}}D",
-    "tasks_hint": "{{failed}} failed"
+    "cost_label": "Cost · {days}D",
+    "tokens_label": "Tokens · {days}D",
+    "tokens_hint": "Input {input} · Output {output}",
+    "run_time_label": "Run time · {days}D",
+    "run_time_hint": "Across {tasks} tasks",
+    "tasks_label": "Tasks · {days}D",
+    "tasks_hint": "{failed} failed"
   },
   "dim": {
     "label": "Dimension",
@@ -36,12 +36,12 @@
     "title_tokens": "Weekly tokens",
     "title_time": "Weekly run time",
     "title_tasks": "Weekly tasks",
-    "partial_label": "{{range}} (partial · {{covered}} / 7 days)"
+    "partial_label": "{range} (partial · {covered} / 7 days)"
   },
   "leaderboard": {
     "title": "Leaderboard",
-    "caption": "{{count}} agents",
-    "caption_with_deleted": "{{count}} agents · {{deleted}} deleted",
+    "caption": "{count} agents",
+    "caption_with_deleted": "{count} agents · {deleted} deleted",
     "deleted_agents": "Deleted agents",
     "header_agent": "Agent",
     "header_tokens": "Tokens",

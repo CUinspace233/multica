@@ -25,14 +25,14 @@
     "new_issue": "新建 issue",
     "new_project": "新建项目",
     "copy_issue_link": "复制 issue 链接",
-    "copy_identifier": "复制标识符 ({{identifier}})",
+    "copy_identifier": "复制标识符 ({identifier})",
     "switch_to_light": "切换到浅色主题",
     "switch_to_dark": "切换到深色主题",
     "use_system_theme": "跟随系统主题"
   },
   "toast": {
     "link_copied": "已复制链接",
-    "copied_identifier": "已复制 {{identifier}}"
+    "copied_identifier": "已复制 {identifier}"
   },
   "empty": {
     "no_results": "未找到结果。",

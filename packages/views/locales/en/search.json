@@ -25,14 +25,14 @@
     "new_issue": "New Issue",
     "new_project": "New Project",
     "copy_issue_link": "Copy Issue Link",
-    "copy_identifier": "Copy Identifier ({{identifier}})",
+    "copy_identifier": "Copy Identifier ({identifier})",
     "switch_to_light": "Switch to Light Theme",
     "switch_to_dark": "Switch to Dark Theme",
     "use_system_theme": "Use System Theme"
   },
   "toast": {
     "link_copied": "Link copied",
-    "copied_identifier": "Copied {{identifier}}"
+    "copied_identifier": "Copied {identifier}"
   },
   "empty": {
     "no_results": "No results found.",

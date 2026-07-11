@@ -25,14 +25,14 @@
     "new_issue": "新規イシュー",
     "new_project": "新規プロジェクト",
     "copy_issue_link": "イシューのリンクをコピー",
-    "copy_identifier": "識別子をコピー ({{identifier}})",
+    "copy_identifier": "識別子をコピー ({identifier})",
     "switch_to_light": "ライトテーマに切り替え",
     "switch_to_dark": "ダークテーマに切り替え",
     "use_system_theme": "システムテーマを使用"
   },
   "toast": {
     "link_copied": "リンクをコピーしました",
-    "copied_identifier": "{{identifier}}をコピーしました"
+    "copied_identifier": "{identifier}をコピーしました"
   },
   "empty": {
     "no_results": "結果が見つかりませんでした。",

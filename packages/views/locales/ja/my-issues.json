@@ -19,7 +19,7 @@
     "filter_button": "フィルター",
     "filter_status": "ステータス",
     "filter_priority": "優先度",
-    "issue_count_other": "{{count}} 件のイシュー",
+    "issue_count_other": "{count} 件のイシュー",
     "reset_filters": "すべてのフィルターをリセット",
     "display_settings": "表示設定",
     "grouping": "グループ化",

@@ -15,7 +15,7 @@
     "unpin": "ピン留め解除",
     "delete": "削除",
     "no_matches": "該当するプロジェクトはありません",
-    "selected_other": "{{count}} 件選択中",
+    "selected_other": "{count} 件選択中",
     "clear_selection": "選択を解除"
   },
   "table": {
@@ -51,8 +51,8 @@
   "relative_date": {
     "today": "今日",
     "one_day_ago": "1日前",
-    "days_ago": "{{count}}日前",
-    "months_ago": "{{count}}か月前"
+    "days_ago": "{count}日前",
+    "months_ago": "{count}か月前"
   },
   "detail": {
     "not_found": "プロジェクトが見つかりません",
@@ -131,7 +131,7 @@
   "toolbar": {
     "result_count_title": "該当プロジェクト / すべてのプロジェクト",
     "filter_label": "フィルター",
-    "filter_active_count_other": "{{count}} 件のフィルター",
+    "filter_active_count_other": "{count} 件のフィルター",
     "clear_filters": "フィルターをクリア",
     "section_status": "ステータス",
     "section_priority": "優先度",

@@ -36,8 +36,8 @@
   "relative_date": {
     "today": "今天",
     "one_day_ago": "1 天前",
-    "days_ago": "{{count}} 天前",
-    "months_ago": "{{count}} 个月前"
+    "days_ago": "{count} 天前",
+    "months_ago": "{count} 个月前"
   },
   "templates": {
     "daily_news": {
@@ -95,7 +95,7 @@
     "toast_delete_failed": "删除自动化失败",
     "delete_dialog": {
       "title": "删除自动化",
-      "description": "将永久删除\"{{title}}\"，连同它的触发器和运行历史。此操作不可撤销。",
+      "description": "将永久删除\"{title}\"，连同它的触发器和运行历史。此操作不可撤销。",
       "cancel": "取消",
       "confirm": "删除",
       "deleting": "删除中..."
@@ -133,14 +133,14 @@
     "view_log": "查看执行日志",
     "skipped_group": {
       "label": "已跳过",
-      "summary": "{{count}} 条跳过的运行"
+      "summary": "{count} 条跳过的运行"
     }
   },
   "webhook_payload": {
     "label": "Webhook 事件：",
     "unknown_event": "webhook.received",
     "payload": "Payload",
-    "content_type": "Content-Type：{{type}}",
+    "content_type": "Content-Type：{type}",
     "copy": "复制",
     "copied": "已复制 Webhook payload",
     "copied_short": "已复制",
@@ -155,7 +155,7 @@
   "trigger_row": {
     "disabled_badge": "已禁用",
     "deprecated_badge": "已弃用",
-    "next_label": "下次：{{date}}",
+    "next_label": "下次：{date}",
     "webhook_url_label": "Webhook URL",
     "copy_url": "复制 URL",
     "url_copied": "已复制 Webhook URL",
@@ -182,7 +182,7 @@
     "section_title": "Webhook 投递",
     "empty": "暂无 Webhook 投递记录。向 Webhook URL 发送一次 POST 后会显示在这里。",
     "row": {
-      "attempts": "{{count}} 次尝试",
+      "attempts": "{count} 次尝试",
       "replay_badge": "重放"
     },
     "status": {
@@ -258,11 +258,11 @@
     "saving": "保存中...",
     "toast_created": "已创建自动化",
     "toast_create_partial": "自动化已创建，但时间表保存失败",
-    "toast_create_partial_with_reason": "自动化已创建，但时间表保存失败：{{reason}}",
+    "toast_create_partial_with_reason": "自动化已创建，但时间表保存失败：{reason}",
     "toast_create_failed": "创建自动化失败",
     "toast_updated": "已更新自动化",
     "toast_update_partial": "自动化已更新，但时间表保存失败",
-    "toast_update_partial_with_reason": "自动化已更新，但时间表保存失败：{{reason}}",
+    "toast_update_partial_with_reason": "自动化已更新，但时间表保存失败：{reason}",
     "toast_update_failed": "更新自动化失败",
     "section_agent": "智能体",
     "section_assignee": "执行方",
@@ -347,24 +347,24 @@
     "timezone_label": "时区",
     "days_label": "星期",
     "summary": {
-      "hourly": "每小时 · :{{min}}",
-      "daily": "每天 {{time}}",
-      "weekdays": "工作日 {{time}}",
-      "weekly": "{{days}} {{time}}",
+      "hourly": "每小时 · :{min}",
+      "daily": "每天 {time}",
+      "weekdays": "工作日 {time}",
+      "weekly": "{days} {time}",
       "custom": "自定义 cron",
       "no_days": "—"
     },
     "describe": {
-      "hourly": "每小时整点过 {{min}} 分运行",
-      "daily": "每天 {{time}} {{offset}} 运行",
-      "weekdays": "每个工作日 {{time}} {{offset}} 运行",
-      "weekly": "每 {{days}} 的 {{time}} {{offset}} 运行",
-      "custom": "自定义时间表：{{cron}}"
+      "hourly": "每小时整点过 {min} 分运行",
+      "daily": "每天 {time} {offset} 运行",
+      "weekdays": "每个工作日 {time} {offset} 运行",
+      "weekly": "每 {days} 的 {time} {offset} 运行",
+      "custom": "自定义时间表：{cron}"
     },
     "countdown": {
-      "days_hours": "{{days}} 天 {{hours}} 小时",
-      "hours_minutes": "{{hours}} 小时 {{minutes}} 分",
-      "minutes": "{{minutes}} 分",
+      "days_hours": "{days} 天 {hours} 小时",
+      "hours_minutes": "{hours} 小时 {minutes} 分",
+      "minutes": "{minutes} 分",
       "less_than_minute": "不到 1 分"
     }
   },
@@ -381,7 +381,7 @@
   "toolbar": {
     "result_count_title": "当前结果 / 全部自动化",
     "filter_label": "筛选",
-    "filter_active_count_other": "{{count}} 项筛选",
+    "filter_active_count_other": "{count} 项筛选",
     "clear_filters": "清除筛选",
     "section_assignee": "执行者",
     "section_mode": "模式",
@@ -398,11 +398,11 @@
     "pause": "暂停",
     "resume": "恢复",
     "delete": "删除",
-    "selected_other": "已选 {{count}} 项",
+    "selected_other": "已选 {count} 项",
     "clear_selection": "清除选择",
     "delete_dialog": {
       "title": "删除自动化？",
-      "description_other": "将永久删除 {{count}} 个自动化及其运行历史。",
+      "description_other": "将永久删除 {count} 个自动化及其运行历史。",
       "warning": "此操作无法撤销。",
       "cancel": "取消",
       "confirm": "永久删除",

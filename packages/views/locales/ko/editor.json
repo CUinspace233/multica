@@ -24,7 +24,7 @@
     },
     "sub_issue": {
       "tooltip": "선택 영역으로 하위 이슈 만들기",
-      "created": "{{identifier}} 생성됨",
+      "created": "{identifier} 생성됨",
       "create_failed": "하위 이슈를 만들지 못했습니다"
     }
   },
@@ -70,7 +70,7 @@
     "fullscreen": "전체 화면"
   },
   "file_card": {
-    "uploading": "{{filename}} 업로드 중"
+    "uploading": "{filename} 업로드 중"
   },
   "title_editor": {
     "title_aria_label": "제목"
