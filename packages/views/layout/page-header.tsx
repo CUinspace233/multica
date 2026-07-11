@@ -1,11 +1,15 @@
 "use client";
 
 import { cn } from "@multica/ui/lib/utils";
-import { SidebarTrigger, useSidebarSafe } from "@multica/ui/components/ui/sidebar";
+import { SidebarTrigger } from "@multica/ui/components/ui/sidebar";
 
+/**
+ * Always render the mobile hamburger. Visibility is gated purely by the
+ * caller's `md:hidden` className — `SidebarTrigger` internally uses a safe
+ * context hook, so even if the provider tree is briefly missing the button
+ * stays rendered and the click becomes a no-op rather than crashing.
+ */
 function MobileSidebarTrigger() {
-  const sidebar = useSidebarSafe();
-  if (!sidebar) return null;
   return <SidebarTrigger className="mr-2 md:hidden" />;
 }
 

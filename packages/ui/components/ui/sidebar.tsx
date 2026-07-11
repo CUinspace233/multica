@@ -293,7 +293,11 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+  // Safe variant: the trigger is a public entry point — if a caller renders
+  // it outside a SidebarProvider (e.g. during a transient layout swap), we
+  // stay rendered so the user can recover with a refresh, and the click
+  // becomes a silent no-op instead of throwing.
+  const sidebar = useSidebarSafe()
   const { t } = useTranslation("ui")
 
   return (
@@ -305,7 +309,7 @@ function SidebarTrigger({
       className={cn(className)}
       onClick={(event) => {
         onClick?.(event)
-        toggleSidebar()
+        sidebar?.toggleSidebar()
       }}
       {...props}
     >

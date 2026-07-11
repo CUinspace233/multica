@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions } from "@tanstack/react-query";
 import { api } from "../api";
 import type { Agent, Squad, Workspace } from "../types";
 
@@ -23,6 +23,16 @@ export function workspaceListOptions() {
   return queryOptions({
     queryKey: workspaceKeys.list(),
     queryFn: () => api.listWorkspaces(),
+    // Bound the auto-refetch window: even if invalidate fires within 60s,
+    // we treat the cached list as fresh. WS-driven invalidations (the only
+    // refetch trigger) still force-refresh because `invalidateQueries`
+    // marks `isInvalidated`, bypassing this.
+    staleTime: 60 * 1000,
+    // Keep showing the last successful list during a refetch — prevents the
+    // ~1 frame window where `data` would briefly be `[]` after a gcTime
+    // eviction + new subscription, which would cause useCurrentWorkspace
+    // and DashboardGuard to mis-fire.
+    placeholderData: keepPreviousData,
   });
 }
 

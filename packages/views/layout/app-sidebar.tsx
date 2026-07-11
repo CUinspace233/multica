@@ -67,7 +67,7 @@ import {
   DropdownMenuTrigger,
 } from "@multica/ui/components/ui/dropdown-menu";
 import { useAuthStore } from "@multica/core/auth";
-import { useCurrentWorkspace, useWorkspacePaths, paths } from "@multica/core/paths";
+import { useCurrentWorkspace, useWorkspaceSlug, paths } from "@multica/core/paths";
 import { workspaceListOptions, myInvitationListOptions, workspaceKeys } from "@multica/core/workspace/queries";
 import { resolvePublicFileUrl } from "@multica/core/workspace/avatar-url";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -351,7 +351,12 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
   const userId = useAuthStore((s) => s.user?.id);
   const logout = useLogout();
   const workspace = useCurrentWorkspace();
-  const p = useWorkspacePaths();
+  // Build workspace paths non-throwing so the sidebar can render a skeleton
+  // during the brief window where the workspace list cache is empty (e.g.
+  // right after a gcTime eviction). The pinned-issue href builder below
+  // returns an empty string until paths resolve.
+  const slug = useWorkspaceSlug();
+  const p = React.useMemo(() => (slug ? paths.workspace(slug) : null), [slug]);
   const { data: workspaces = EMPTY_WORKSPACES } = useQuery(workspaceListOptions());
   const { data: myInvitations = EMPTY_INVITATIONS } = useQuery(myInvitationListOptions());
   const workspaceCreationDisabled = useConfigStore((s) => s.workspaceCreationDisabled);
@@ -391,7 +396,10 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
   const sidebarScrollRef = useRef<HTMLDivElement>(null);
   const sidebarFadeStyle = useScrollFade(sidebarScrollRef, 24);
   const getPinHref = useCallback(
-    (pin: PinnedItem) => (pin.item_type === "issue" ? p.issueDetail(pin.item_id) : p.projectDetail(pin.item_id)),
+    (pin: PinnedItem) => {
+      if (!p) return "";
+      return pin.item_type === "issue" ? p.issueDetail(pin.item_id) : p.projectDetail(pin.item_id);
+    },
     [p],
   );
 
@@ -654,7 +662,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
             <SidebarGroupContent>
               <SidebarMenu className="gap-0.5">
                 {personalNav.map((item) => {
-                  const href = p[item.key]();
+                  const href = p ? p[item.key]() : "";
                   const isActive = isNavActive(pathname, href);
                   return (
                     <SidebarMenuItem key={item.key}>
@@ -718,7 +726,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
             <SidebarGroupContent>
               <SidebarMenu className="gap-0.5">
                 {workspaceNav.map((item) => {
-                  const href = p[item.key]();
+                  const href = p ? p[item.key]() : "";
                   const isActive = !isActivePinnedRoute && isNavActive(pathname, href);
                   return (
                     <SidebarMenuItem key={item.key}>
@@ -742,7 +750,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
             <SidebarGroupContent>
               <SidebarMenu className="gap-0.5">
                 {configureNav.map((item) => {
-                  const href = p[item.key]();
+                  const href = p ? p[item.key]() : "";
                   const isActive = isNavActive(pathname, href);
                   return (
                     <SidebarMenuItem key={item.key}>

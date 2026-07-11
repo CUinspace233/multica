@@ -26,24 +26,30 @@ export function DashboardLayout({
   loadingIndicator,
 }: DashboardLayoutProps) {
   return (
-    <DashboardGuard
-      loadingFallback={
-        <div className="flex h-svh items-center justify-center">
-          {loadingIndicator}
-        </div>
-      }
-    >
-      <SidebarProvider className="h-svh">
-        <WorkspacePresencePrefetch />
-        <AppSidebar searchSlot={searchSlot} />
-        <SidebarInset className="relative overflow-hidden">
-          <NavigationProgress />
+    // SidebarProvider is mounted OUTSIDE DashboardGuard so the chrome
+    // (and the mobile hamburger trigger inside page headers) survives any
+    // transient `!workspace` window — e.g. workspace-list cache eviction
+    // during a long-lived session. The guard now only gates the inner
+    // content area; its fallback renders as an overlay inside SidebarInset
+    // so the sidebar skeleton stays visible to the right user.
+    <SidebarProvider className="h-svh">
+      <WorkspacePresencePrefetch />
+      <AppSidebar searchSlot={searchSlot} />
+      <SidebarInset className="relative overflow-hidden">
+        <NavigationProgress />
+        <DashboardGuard
+          loadingFallback={
+            <div className="absolute inset-0 z-30 flex items-center justify-center bg-background">
+              {loadingIndicator}
+            </div>
+          }
+        >
           {children}
           <ModalRegistry />
           <SourceBackfillModal />
           {extra}
-        </SidebarInset>
-      </SidebarProvider>
-    </DashboardGuard>
+        </DashboardGuard>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
