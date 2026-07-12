@@ -2,6 +2,7 @@
   "title": "Admin",
   "page_title": "Instance admin",
   "page_subtitle": "Manage users, workspaces, daemon runtimes, and the signup allowlist across this instance.",
+  "back_to_workspaces": "워크스페이스로 돌아가기",
   "tabs": {
     "users": "Users",
     "workspaces": "Workspaces",

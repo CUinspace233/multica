@@ -45,8 +45,8 @@ export function AdminDashboard() {
           superuser role, so we don't need a "My Account" group like the
           user-facing settings page does. */}
       <div className="shrink-0 md:w-52 border-b md:border-b-0 md:border-r md:overflow-y-auto p-3 md:p-4">
-        <h1 className="text-sm font-semibold mb-1 px-2">{t(($) => $.page_title)}</h1>
-        <p className="text-xs text-muted-foreground mb-4 px-2">
+        <h1 className="hidden md:block text-sm font-semibold mb-1 px-2">{t(($) => $.page_title)}</h1>
+        <p className="hidden md:block text-xs text-muted-foreground mb-4 px-2">
           {t(($) => $.page_subtitle)}
         </p>
         <TabsList variant="line" className="flex-col items-stretch w-full">

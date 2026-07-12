@@ -2,6 +2,7 @@
   "title": "管理",
   "page_title": "实例管理",
   "page_subtitle": "管理本实例的用户、工作空间、守护进程和注册白名单。",
+  "back_to_workspaces": "返回工作区",
   "groups": {
     "identity": "实例",
     "access": "访问控制"

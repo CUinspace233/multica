@@ -8,12 +8,14 @@
 // non-admins are bounced before any of this downloads.
 import { StatusStrip } from "./status-strip";
 import { AdminDashboard } from "./admin-dashboard";
+import { AdminMobileHeader } from "./admin-mobile-header";
 
 export const dynamic = "force-dynamic";
 
 export default function AdminPage() {
   return (
     <div className="flex h-full flex-col overflow-hidden">
+      <AdminMobileHeader />
       <StatusStrip />
       <AdminDashboard />
     </div>

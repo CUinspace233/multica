@@ -45,7 +45,7 @@ export async function StatusStrip() {
   const instance = stats?.instance_name || "instance";
 
   return (
-    <div className="border-b h-9 shrink-0 flex items-center gap-6 px-4 text-xs text-muted-foreground">
+    <div className="border-b h-auto md:h-9 shrink-0 flex flex-wrap items-center gap-x-3 gap-y-1 md:flex-nowrap md:gap-6 px-4 text-xs text-muted-foreground">
       <span className="font-mono">
         <span className="text-muted-foreground/70">instance</span>{" "}
         <span className="text-foreground">{instance}</span>
