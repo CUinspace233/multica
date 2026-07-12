@@ -8,6 +8,7 @@ import { AppSidebar } from "./app-sidebar";
 import { DashboardGuard } from "./dashboard-guard";
 import { NavigationProgress } from "./navigation-progress";
 import { WorkspacePresencePrefetch } from "./workspace-presence-prefetch";
+import { GlobalShortcuts } from "./global-shortcuts";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -32,7 +33,11 @@ export function DashboardLayout({
     // during a long-lived session. The guard now only gates the inner
     // content area; its fallback renders as an overlay inside SidebarInset
     // so the sidebar skeleton stays visible to the right user.
+    // GlobalShortcuts (upstream #5294) is mounted at the top of the provider
+    // so keyboard shortcuts are active across the whole shell, not just the
+    // guarded inner content.
     <SidebarProvider className="h-svh bg-app-shell">
+      <GlobalShortcuts />
       <WorkspacePresencePrefetch />
       <AppSidebar searchSlot={searchSlot} />
       <SidebarInset className="relative overflow-hidden">
