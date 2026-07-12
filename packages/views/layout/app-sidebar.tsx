@@ -393,7 +393,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
   // counts — auto mark-read won't fire there, so the badge must.
   const activeChatSessionId = useChatStore((s) => s.activeSessionId);
   const floatingChatOpen = useChatStore((s) => s.isOpen);
-  const chatHref = p.chat();
+  const chatHref = p ? p.chat() : "";
   const viewedChatSessionId =
     floatingChatOpen || isNavActive(pathname, chatHref)
       ? activeChatSessionId
