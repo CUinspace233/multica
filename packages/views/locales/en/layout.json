@@ -1,6 +1,7 @@
 {
   "nav": {
     "inbox": "Inbox",
+    "chat": "Chat",
     "my_issues": "My Issues",
     "issues": "Issues",
     "projects": "Projects",
@@ -10,8 +11,7 @@
     "usage": "Usage",
     "runtimes": "Runtimes",
     "skills": "Skills",
-    "settings": "Settings",
-    "admin": "Admin"
+    "settings": "Settings"
   },
   "help": {
     "trigger": "Help",

@@ -15,8 +15,8 @@
     "unpin": "Unpin",
     "delete": "Delete",
     "no_matches": "No projects match",
-    "selected_one": "{count} selected",
-    "selected_other": "{count} selected",
+    "selected_one": "{{count}} selected",
+    "selected_other": "{{count}} selected",
     "clear_selection": "Clear selection"
   },
   "table": {
@@ -52,8 +52,8 @@
   "relative_date": {
     "today": "Today",
     "one_day_ago": "1d ago",
-    "days_ago": "{count}d ago",
-    "months_ago": "{count}mo ago"
+    "days_ago": "{{count}}d ago",
+    "months_ago": "{{count}}mo ago"
   },
   "detail": {
     "not_found": "Project not found",
@@ -132,8 +132,8 @@
   "toolbar": {
     "result_count_title": "Matching projects / all projects",
     "filter_label": "Filter",
-    "filter_active_count_one": "{count} filter",
-    "filter_active_count_other": "{count} filters",
+    "filter_active_count_one": "{{count}} filter",
+    "filter_active_count_other": "{{count}} filters",
     "clear_filters": "Clear filters",
     "section_status": "Status",
     "section_priority": "Priority",

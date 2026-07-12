@@ -7,13 +7,13 @@
     "period_label": "时间范围"
   },
   "kpi": {
-    "cost_label": "费用 · {days}天",
-    "tokens_label": "Token · {days}天",
-    "tokens_hint": "输入 {input} · 输出 {output}",
-    "run_time_label": "运行时长 · {days}天",
-    "run_time_hint": "共 {tasks} 个任务",
-    "tasks_label": "任务数 · {days}天",
-    "tasks_hint": "失败 {failed} 个"
+    "cost_label": "费用 · {{days}}天",
+    "tokens_label": "Token · {{days}}天",
+    "tokens_hint": "输入 {{input}} · 输出 {{output}}",
+    "run_time_label": "运行时长 · {{days}}天",
+    "run_time_hint": "共 {{tasks}} 个任务",
+    "tasks_label": "任务数 · {{days}}天",
+    "tasks_hint": "失败 {{failed}} 个"
   },
   "dim": {
     "label": "维度",
@@ -36,12 +36,12 @@
     "title_tokens": "每周 Token",
     "title_time": "每周运行时长",
     "title_tasks": "每周任务数",
-    "partial_label": "{range}（未满 · 已过 {covered} / 7 天）"
+    "partial_label": "{{range}}（未满 · 已过 {{covered}} / 7 天）"
   },
   "leaderboard": {
     "title": "排行榜",
-    "caption": "{count} 个智能体",
-    "caption_with_deleted": "{count} 个智能体 · {deleted} 个已删除",
+    "caption": "{{count}} 个智能体",
+    "caption_with_deleted": "{{count}} 个智能体 · {{deleted}} 个已删除",
     "deleted_agents": "已删除的智能体",
     "header_agent": "智能体",
     "header_tokens": "Token",

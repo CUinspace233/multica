@@ -1,6 +1,7 @@
 {
   "nav": {
     "inbox": "인박스",
+    "chat": "채팅",
     "my_issues": "내 이슈",
     "issues": "이슈",
     "projects": "프로젝트",
@@ -10,8 +11,7 @@
     "usage": "사용량",
     "runtimes": "런타임",
     "skills": "스킬",
-    "settings": "설정",
-    "admin": "관리"
+    "settings": "설정"
   },
   "help": {
     "trigger": "도움말",

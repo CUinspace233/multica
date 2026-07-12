@@ -1,6 +1,6 @@
 {
   "step_header": {
-    "step_of": "第 {current} 步 / 共 {total} 步"
+    "step_of": "第 {{current}} 步 / 共 {{total}} 步"
   },
   "welcome": {
     "wordmark": "欢迎使用 Multica",
@@ -147,7 +147,7 @@
     "lede_prefix": "根据你的回答，推荐的是 ",
     "lede_suffix": "。从这四个模板里挑一个最贴你的——每个模板都开箱即用，可以立刻接 issue。之后可以在智能体设置页里再调整指令。",
     "footer_hint": "一个智能体足够上手了。之后可以从侧边栏添加更多。",
-    "create_action": "创建 {name}",
+    "create_action": "创建 {{name}}",
     "create_failed": "创建智能体失败",
     "recommended_badge": "推荐",
     "templates": {
@@ -203,8 +203,8 @@
       "capabilities": "你可以问我任何关于 Multica 的使用，也可以让我帮你在工作区完成任务 —— 建 issue、定时任务、再建一个 agent……",
       "section_label": "选一个或多个任务,让我开始干活：",
       "assign_empty": "选一个或多个",
-      "assign_count": "分配 {count} 个任务给我 →",
-      "assign_count_plural": "分配 {count} 个任务给我 →",
+      "assign_count": "分配 {{count}} 个任务给我 →",
+      "assign_count_plural": "分配 {{count}} 个任务给我 →",
       "cards": {
         "intro": {
           "subtitle": "让我用 1-2 段话讲清楚 Multica 是什么、能干嘛。"
@@ -218,7 +218,7 @@
       },
       "success": {
         "title": "都搞定了！",
-        "subtitle": "稍作等待，你的 {agentName} 正在为你工作 ☕",
+        "subtitle": "稍作等待，你的 {{agentName}} 正在为你工作 ☕",
         "tip_inbox": "它有进展时，你能在「收件箱」收到通知。",
         "tip_chat": "想直接聊聊？点右下角的对话气泡就行。",
         "got_it": "知道了 →"
@@ -247,7 +247,7 @@
     "eyebrow_first": "你的第一个工作区",
     "eyebrow_resume": "继续，或重新开始",
     "headline_first": "给工作区起个名字。",
-    "headline_resume": "继续 {name}，或新建一个。",
+    "headline_resume": "继续 {{name}}，或新建一个。",
     "lede_first": "工作区是 issue、智能体和项目所在的地方。之后可以邀请同事，或再开一个工作区。",
     "lede_resume": "用已有的工作区继续，或在它旁边再建一个新的 —— 你可以加入任意多个工作区。",
     "name_label": "工作区名称",
@@ -259,14 +259,14 @@
     "issue_prefix_suffix": "。之后可以在设置里修改。",
     "create_new_title": "创建一个新工作区",
     "create_new_subtitle": "重新开始 —— 给工作的另一面留一个独立空间。",
-    "hint_opening": "正在打开 {name}。",
-    "hint_creating": "正在创建 {name}。",
-    "hint_creating_pending": "正在创建 {name}...",
+    "hint_opening": "正在打开 {{name}}。",
+    "hint_creating": "正在创建 {{name}}。",
+    "hint_creating_pending": "正在创建 {{name}}...",
     "hint_creating_fallback": "你的工作区",
     "hint_name_first": "先给工作区起个名字才能创建。",
     "hint_pick": "选择你的工作区或开一个新的。",
-    "cta_open": "打开 {name}",
-    "cta_create_named": "创建 {name}",
+    "cta_open": "打开 {{name}}",
+    "cta_create_named": "创建 {{name}}",
     "cta_create_workspace": "创建工作区",
     "cta_creating": "创建中...",
     "slug_format_error": "只能包含小写字母、数字和连字符",
@@ -310,7 +310,7 @@
     "creation_disabled_lede": "该 Multica 实例不允许创建新的工作区。等管理员把你邀请到某个工作区后，接受邀请并刷新即可继续。",
     "creation_disabled_logout": "退出登录",
     "creation_disabled_eyebrow_resume": "你的工作区",
-    "creation_disabled_headline_resume": "继续使用 {name}。",
+    "creation_disabled_headline_resume": "继续使用 {{name}}。",
     "creation_disabled_lede_resume": "该实例已禁用创建工作区，继续进入你已有的工作区即可。"
   },
   "step_runtime": {
@@ -319,10 +319,10 @@
     "scanning_lede_suffix": " 等。我们正在检测这台电脑上装了哪些。",
     "found_headline": "这台电脑已连接。选一个 agent 运行时。",
     "found_lede": "以下是在这台电脑上找到的 agent 运行时。挑一个支撑你的第一个智能体 —— 之后可以随时切换或再加。",
-    "runtime_count_other": "{count} 个 agent 运行时",
+    "runtime_count_other": "{{count}} 个 agent 运行时",
     "status_all_online": "全部在线",
     "status_none_online": "全部离线",
-    "status_n_online": "{count} 个在线",
+    "status_n_online": "{{count}} 个在线",
     "online_label": "在线",
     "offline_label": "离线",
     "empty_headline": "这台电脑上还没有可用的 agent 运行时。",
@@ -337,7 +337,7 @@
     "skip": "暂时跳过",
     "refresh": "刷新",
     "refreshing": "正在刷新…",
-    "hint_selected": "已选择：{name}",
+    "hint_selected": "已选择：{{name}}",
     "hint_pick": "在上方选一个 agent 运行时继续。",
     "hint_waiting": "等待第一个结果...",
     "hint_skip_or_refresh": "装好后点刷新，或跳过进入工作区。",
@@ -364,7 +364,7 @@
     "cli_dialog_description": "和桌面端相同的连接，通过终端配置。适用于服务器、远程开发机或任意无头电脑。",
     "cli_dialog_pick_hint": "在上方选一台电脑。",
     "cli_dialog_connect": "连接并继续",
-    "runtimes_connected_other": "已连接 {count} 台电脑",
+    "runtimes_connected_other": "已连接 {{count}} 台电脑",
     "live_listening": "实时 · 正在等待你的电脑",
     "stage_normal_prefix": "运行上面的命令。当 ",
     "stage_normal_suffix": " 完成浏览器登录后，你的电脑会自动出现在这里（通常 10–30 秒）。",

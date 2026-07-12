@@ -24,7 +24,7 @@
     },
     "sub_issue": {
       "tooltip": "Create sub-issue from selection",
-      "created": "Created {identifier}",
+      "created": "Created {{identifier}}",
       "create_failed": "Failed to create sub-issue"
     }
   },
@@ -77,7 +77,7 @@
     "fullscreen": "Fullscreen"
   },
   "file_card": {
-    "uploading": "Uploading {filename}"
+    "uploading": "Uploading {{filename}}"
   },
   "title_editor": {
     "title_aria_label": "Title"

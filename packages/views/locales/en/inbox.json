@@ -15,9 +15,9 @@
     "archive_tooltip": "Archive",
     "time": {
       "just_now": "just now",
-      "minutes": "{count}m",
-      "hours": "{count}h",
-      "days": "{count}d"
+      "minutes": "{{count}}m",
+      "hours": "{{count}}h",
+      "days": "{{count}}d"
     }
   },
   "detail": {
@@ -50,15 +50,15 @@
   "labels": {
     "set_status_to": "Set status to",
     "set_priority_to": "Set priority to",
-    "assigned_to": "Assigned to {name}",
+    "assigned_to": "Assigned to {{name}}",
     "removed_assignee": "Removed assignee",
-    "set_start_date_to": "Set start date to {date}",
+    "set_start_date_to": "Set start date to {{date}}",
     "removed_start_date": "Removed start date",
-    "set_due_date_to": "Set due date to {date}",
+    "set_due_date_to": "Set due date to {{date}}",
     "removed_due_date": "Removed due date",
-    "reacted_to_comment": "Reacted {emoji} to your comment",
-    "created_with_agent": "Created with agent: {identifier}",
-    "failed_with_detail": "Failed: {detail}"
+    "reacted_to_comment": "Reacted {{emoji}} to your comment",
+    "created_with_agent": "Created with agent: {{identifier}}",
+    "failed_with_detail": "Failed: {{detail}}"
   },
   "errors": {
     "mark_read_failed": "Failed to mark as read",

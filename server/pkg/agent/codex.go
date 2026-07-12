@@ -2,7 +2,6 @@ package agent
 
 import (
 	"bufio"
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -128,14 +127,7 @@ func buildCodexArgs(opts ExecOptions, logger *slog.Logger) []string {
 // managed set — strict mode, no global fallback); only SQL NULL or the
 // literal JSON `null` count as absent (CLI default).
 func hasManagedCodexMcpConfig(raw json.RawMessage) bool {
-	trimmed := bytes.TrimSpace(raw)
-	if len(trimmed) == 0 {
-		return false
-	}
-	if bytes.Equal(trimmed, []byte("null")) {
-		return false
-	}
-	return true
+	return hasManagedMcpConfig(raw)
 }
 
 // codexManagedMcpConfigKeyRe matches the daemon-managed config namespace
@@ -380,15 +372,24 @@ func renderCodexMcpServersBlock(raw json.RawMessage) (string, bool, error) {
 
 func normalizeCodexMcpServerConfig(server map[string]any) map[string]any {
 	if !isCodexRemoteMcpServer(server) {
-		return server
+		normalized := make(map[string]any, len(server))
+		for k, v := range server {
+			if isMulticaMcpSelectorKey(k) {
+				continue
+			}
+			normalized[k] = v
+		}
+		return normalized
 	}
 
 	normalized := make(map[string]any, len(server)+1)
 	for k, v := range server {
-		switch k {
-		case "type":
+		switch {
+		case isMulticaMcpSelectorKey(k):
 			continue
-		case "headers":
+		case k == "type":
+			continue
+		case k == "headers":
 			if _, ok := server["http_headers"]; !ok {
 				normalized["http_headers"] = v
 			}
@@ -398,6 +399,15 @@ func normalizeCodexMcpServerConfig(server map[string]any) map[string]any {
 	}
 	normalized["experimental_use_rmcp_client"] = true
 	return normalized
+}
+
+func isMulticaMcpSelectorKey(k string) bool {
+	switch k {
+	case "tools", "prompts", "resources":
+		return true
+	default:
+		return false
+	}
 }
 
 func isCodexRemoteMcpServer(server map[string]any) bool {
