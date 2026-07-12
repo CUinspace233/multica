@@ -1,14 +1,15 @@
 "use client";
 
-import { useWorkspaceId } from "@multica/core";
+import { useCurrentWorkspace } from "@multica/core/paths";
 import { useWorkspacePresencePrefetch } from "@multica/core/agents";
 
-// Mount once inside any subtree that's already gated on "workspace resolved"
-// (DashboardLayout on web, WorkspaceRouteLayout on desktop). useWorkspaceId
-// throws when called outside a resolved workspace — the gating in those
-// layouts guarantees this component never sees that state.
+// Mount inside the dashboard shell (DashboardLayout on web,
+// WorkspaceRouteLayout on desktop). Tolerates a transiently-null workspace
+// (e.g. workspace list cache eviction during a long-lived session) by
+// skipping the prefetch; the queries will simply re-enable once the
+// workspace resolves again.
 export function WorkspacePresencePrefetch() {
-  const wsId = useWorkspaceId();
-  useWorkspacePresencePrefetch(wsId);
+  const workspace = useCurrentWorkspace();
+  useWorkspacePresencePrefetch(workspace?.id);
   return null;
 }

@@ -398,7 +398,11 @@ export class ApiClient {
     return res;
   }
 
-  private async fetch<T>(path: string, init?: RequestInit): Promise<T> {
+  // Public so enterprise-fork wrappers (e.g. apps/web/lib/api/admin.ts) can
+  // hit fork-only endpoints without us having to add a typed method per
+  // route. The auth/CSRF/header pipeline still runs through fetchRaw so
+  // cookies and CSRF tokens are forwarded correctly.
+  async fetch<T>(path: string, init?: RequestInit): Promise<T> {
     const res = await this.fetchRaw(path, {
       ...init,
       extraHeaders: { "Content-Type": "application/json" },

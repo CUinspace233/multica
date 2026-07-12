@@ -15,9 +15,9 @@
     "archive_tooltip": "アーカイブ",
     "time": {
       "just_now": "たった今",
-      "minutes": "{{count}}分",
-      "hours": "{{count}}時間",
-      "days": "{{count}}日"
+      "minutes": "{count}分",
+      "hours": "{count}時間",
+      "days": "{count}日"
     }
   },
   "detail": {
@@ -50,15 +50,15 @@
   "labels": {
     "set_status_to": "ステータスを変更:",
     "set_priority_to": "優先度を変更:",
-    "assigned_to": "{{name}} に割り当て",
+    "assigned_to": "{name} に割り当て",
     "removed_assignee": "担当者を削除",
-    "set_start_date_to": "開始日: {{date}}",
+    "set_start_date_to": "開始日: {date}",
     "removed_start_date": "開始日を削除",
-    "set_due_date_to": "期限: {{date}}",
+    "set_due_date_to": "期限: {date}",
     "removed_due_date": "期限を削除",
-    "reacted_to_comment": "あなたのコメントに {{emoji}} のリアクションをしました",
-    "created_with_agent": "エージェントで作成: {{identifier}}",
-    "failed_with_detail": "失敗: {{detail}}"
+    "reacted_to_comment": "あなたのコメントに {emoji} のリアクションをしました",
+    "created_with_agent": "エージェントで作成: {identifier}",
+    "failed_with_detail": "失敗: {detail}"
   },
   "errors": {
     "mark_read_failed": "既読にできませんでした",

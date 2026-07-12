@@ -36,8 +36,8 @@
   "relative_date": {
     "today": "Today",
     "one_day_ago": "1d ago",
-    "days_ago": "{{count}}d ago",
-    "months_ago": "{{count}}mo ago"
+    "days_ago": "{count}d ago",
+    "months_ago": "{count}mo ago"
   },
   "templates": {
     "daily_news": {
@@ -95,7 +95,7 @@
     "toast_delete_failed": "Failed to delete autopilot",
     "delete_dialog": {
       "title": "Delete autopilot",
-      "description": "This will permanently delete \"{{title}}\", along with its triggers and run history. This action cannot be undone.",
+      "description": "This will permanently delete \"{title}\", along with its triggers and run history. This action cannot be undone.",
       "cancel": "Cancel",
       "confirm": "Delete",
       "deleting": "Deleting..."
@@ -133,14 +133,14 @@
     "view_log": "View execution log",
     "skipped_group": {
       "label": "Skipped",
-      "summary": "{{count}} skipped runs"
+      "summary": "{count} skipped runs"
     }
   },
   "webhook_payload": {
     "label": "Webhook event:",
     "unknown_event": "webhook.received",
     "payload": "Payload",
-    "content_type": "Content-Type: {{type}}",
+    "content_type": "Content-Type: {type}",
     "copy": "Copy",
     "copied": "Webhook payload copied",
     "copied_short": "Copied",
@@ -155,7 +155,7 @@
   "trigger_row": {
     "disabled_badge": "Disabled",
     "deprecated_badge": "Deprecated",
-    "next_label": "Next: {{date}}",
+    "next_label": "Next: {date}",
     "webhook_url_label": "Webhook URL",
     "copy_url": "Copy URL",
     "url_copied": "Webhook URL copied",
@@ -182,7 +182,7 @@
     "section_title": "Webhook Deliveries",
     "empty": "No webhook deliveries yet. Send a POST to the webhook URL to see entries here.",
     "row": {
-      "attempts": "{{count}}× attempts",
+      "attempts": "{count}× attempts",
       "replay_badge": "Replay"
     },
     "status": {
@@ -258,11 +258,11 @@
     "saving": "Saving...",
     "toast_created": "Autopilot created",
     "toast_create_partial": "Autopilot created, but schedule failed to save",
-    "toast_create_partial_with_reason": "Autopilot created, but schedule failed to save: {{reason}}",
+    "toast_create_partial_with_reason": "Autopilot created, but schedule failed to save: {reason}",
     "toast_create_failed": "Failed to create autopilot",
     "toast_updated": "Autopilot updated",
     "toast_update_partial": "Autopilot updated, but schedule failed to save",
-    "toast_update_partial_with_reason": "Autopilot updated, but schedule failed to save: {{reason}}",
+    "toast_update_partial_with_reason": "Autopilot updated, but schedule failed to save: {reason}",
     "toast_update_failed": "Failed to update autopilot",
     "section_agent": "Agent",
     "section_assignee": "Assignee",
@@ -347,24 +347,24 @@
     "timezone_label": "Timezone",
     "days_label": "Days",
     "summary": {
-      "hourly": "Hourly · :{{min}}",
-      "daily": "Daily {{time}}",
-      "weekdays": "Weekdays {{time}}",
-      "weekly": "{{days}} {{time}}",
+      "hourly": "Hourly · :{min}",
+      "daily": "Daily {time}",
+      "weekdays": "Weekdays {time}",
+      "weekly": "{days} {time}",
       "custom": "Custom cron",
       "no_days": "—"
     },
     "describe": {
-      "hourly": "Runs every hour at :{{min}}",
-      "daily": "Runs daily at {{time}} {{offset}}",
-      "weekdays": "Runs weekdays at {{time}} {{offset}}",
-      "weekly": "Runs every {{days}} at {{time}} {{offset}}",
-      "custom": "Custom schedule: {{cron}}"
+      "hourly": "Runs every hour at :{min}",
+      "daily": "Runs daily at {time} {offset}",
+      "weekdays": "Runs weekdays at {time} {offset}",
+      "weekly": "Runs every {days} at {time} {offset}",
+      "custom": "Custom schedule: {cron}"
     },
     "countdown": {
-      "days_hours": "{{days}}d {{hours}}h",
-      "hours_minutes": "{{hours}}h {{minutes}}m",
-      "minutes": "{{minutes}}m",
+      "days_hours": "{days}d {hours}h",
+      "hours_minutes": "{hours}h {minutes}m",
+      "minutes": "{minutes}m",
       "less_than_minute": "<1m"
     }
   },
@@ -381,8 +381,8 @@
   "toolbar": {
     "result_count_title": "Matching automations / all automations",
     "filter_label": "Filter",
-    "filter_active_count_one": "{{count}} filter",
-    "filter_active_count_other": "{{count}} filters",
+    "filter_active_count_one": "{count} filter",
+    "filter_active_count_other": "{count} filters",
     "clear_filters": "Clear filters",
     "section_assignee": "Assignee",
     "section_mode": "Mode",
@@ -399,13 +399,13 @@
     "pause": "Pause",
     "resume": "Resume",
     "delete": "Delete",
-    "selected_one": "{{count}} selected",
-    "selected_other": "{{count}} selected",
+    "selected_one": "{count} selected",
+    "selected_other": "{count} selected",
     "clear_selection": "Clear selection",
     "delete_dialog": {
       "title": "Delete automation?",
-      "description_one": "This will permanently delete \"{{name}}\" and its run history.",
-      "description_other": "This will permanently delete {{count}} automations and their run history.",
+      "description_one": "This will permanently delete \"{name}\" and its run history.",
+      "description_other": "This will permanently delete {count} automations and their run history.",
       "warning": "This action cannot be undone.",
       "cancel": "Cancel",
       "confirm": "Delete permanently",

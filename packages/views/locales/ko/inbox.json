@@ -15,9 +15,9 @@
     "archive_tooltip": "보관",
     "time": {
       "just_now": "방금 전",
-      "minutes": "{{count}}분",
-      "hours": "{{count}}시간",
-      "days": "{{count}}일"
+      "minutes": "{count}분",
+      "hours": "{count}시간",
+      "days": "{count}일"
     }
   },
   "detail": {
@@ -50,15 +50,15 @@
   "labels": {
     "set_status_to": "상태 변경:",
     "set_priority_to": "우선순위 변경:",
-    "assigned_to": "{{name}}님에게 할당",
+    "assigned_to": "{name}님에게 할당",
     "removed_assignee": "담당자 제거됨",
-    "set_start_date_to": "시작일: {{date}}",
+    "set_start_date_to": "시작일: {date}",
     "removed_start_date": "시작일 제거됨",
-    "set_due_date_to": "마감일: {{date}}",
+    "set_due_date_to": "마감일: {date}",
     "removed_due_date": "마감일 제거됨",
-    "reacted_to_comment": "내 댓글에 {{emoji}} 반응을 남겼습니다",
-    "created_with_agent": "에이전트가 생성: {{identifier}}",
-    "failed_with_detail": "실패: {{detail}}"
+    "reacted_to_comment": "내 댓글에 {emoji} 반응을 남겼습니다",
+    "created_with_agent": "에이전트가 생성: {identifier}",
+    "failed_with_detail": "실패: {detail}"
   },
   "errors": {
     "mark_read_failed": "읽음 표시를 하지 못했습니다",

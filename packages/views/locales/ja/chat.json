@@ -1,13 +1,13 @@
 {
   "fab": {
     "running": "Multica が作業中です...",
-    "unread_other": "未読のチャット {{count}}件",
+    "unread_other": "未読のチャット {count}件",
     "default": "Multica に質問"
   },
   "input": {
     "placeholder_no_agent": "チャットを始めるにはエージェントを作成してください",
     "placeholder_archived": "このセッションはアーカイブされています",
-    "placeholder_named": "{{name}} にメッセージ…",
+    "placeholder_named": "{name} にメッセージ…",
     "placeholder_default": "メッセージを入力…",
     "send_tooltip": "送信",
     "stop_tooltip": "停止",
@@ -16,13 +16,13 @@
   },
   "message_list": {
     "show_details": "詳細を表示",
-    "replied_in": "{{elapsed}}で返信",
-    "failed_after": "{{elapsed}}後に失敗",
+    "replied_in": "{elapsed}で返信",
+    "failed_after": "{elapsed}後に失敗",
     "task_failed_fallback": "タスクが失敗しました",
-    "tools_other": "ツール {{count}}個",
-    "tool_result_named": "{{tool}} の結果: ",
+    "tools_other": "ツール {count}個",
+    "tool_result_named": "{tool} の結果: ",
     "tool_result_unnamed": "結果: ",
-    "process_steps_other": "ステップ {{count}}個",
+    "process_steps_other": "ステップ {count}個",
     "copy_action": "コピー",
     "copied_toast": "コピーしました",
     "copy_failed_toast": "コピーに失敗しました",
@@ -32,15 +32,15 @@
     "untitled": "無題",
     "time": {
       "just_now": "たった今",
-      "minutes": "{{count}}分前",
-      "hours": "{{count}}時間前",
-      "days": "{{count}}日前"
+      "minutes": "{count}分前",
+      "hours": "{count}時間前",
+      "days": "{count}日前"
     },
     "row_delete_aria": "チャットセッションを削除",
     "row_rename_aria": "チャットセッションの名前を変更",
     "delete_dialog": {
       "title": "チャットセッションを削除",
-      "description_with_title": "\"{{title}}\" とそのメッセージが完全に削除されます。この操作は取り消せません。",
+      "description_with_title": "\"{title}\" とそのメッセージが完全に削除されます。この操作は取り消せません。",
       "description_default": "このチャットセッションとそのメッセージが完全に削除されます。この操作は取り消せません。",
       "cancel": "キャンセル",
       "confirm": "削除",
@@ -55,7 +55,7 @@
     },
     "stop_dialog": {
       "title": "この実行を停止しますか？",
-      "description_with_title": "\"{{title}}\" の現在のエージェントタスクをキャンセルします。生成済みの内容はチャットに残ります。",
+      "description_with_title": "\"{title}\" の現在のエージェントタスクをキャンセルします。生成済みの内容はチャットに残ります。",
       "description_default": "現在のエージェントタスクをキャンセルします。生成済みの内容はチャットに残ります。",
       "cancel": "実行を続ける",
       "confirm": "実行を停止",
@@ -85,7 +85,7 @@
     "first_time_pillars": "イシュー、プロジェクト、スキル",
     "first_time_pillars_suffix": "。",
     "first_time_actions": "要約を頼んだり、今日の予定を立てたり、簡単なタスクを任せたりしてみましょう。",
-    "returning_title_named": "こんにちは、{{name}} です",
+    "returning_title_named": "こんにちは、{name} です",
     "returning_title_default": "Multica へようこそ",
     "returning_subtitle": "こう聞いてみましょう"
   },
@@ -97,8 +97,8 @@
   "no_agent_banner": "チャットを始めるにはエージェントが必要です。",
   "offline_banner": {
     "fallback_name": "エージェント",
-    "unstable": "{{name}} の接続が不安定です。返信が遅れる場合があります。",
-    "offline": "{{name}} はオフラインです。再接続されたらメッセージが届きます。"
+    "unstable": "{name} の接続が不安定です。返信が遅れる場合があります。",
+    "offline": "{name} はオフラインです。再接続されたらメッセージが届きます。"
   },
   "status_pill": {
     "stages": {

@@ -21,7 +21,7 @@
   },
   "archive_dialog": {
     "title": "このスクワッドをアーカイブしますか？",
-    "description": "\"{{name}}\" がアーカイブされます。現在このスクワッドに割り当てられているイシューはリーダーに引き継がれます。この操作は取り消せません。ルーティングを元に戻すには、新しいスクワッドを作成してください。",
+    "description": "\"{name}\" がアーカイブされます。現在このスクワッドに割り当てられているイシューはリーダーに引き継がれます。この操作は取り消せません。ルーティングを元に戻すには、新しいスクワッドを作成してください。",
     "cancel": "キャンセル",
     "confirm": "アーカイブ",
     "archiving": "アーカイブ中…",
@@ -52,7 +52,7 @@
   },
   "members_tab": {
     "section_title": "メンバー",
-    "section_count_other": "このスクワッドのメンバー {{count}}名",
+    "section_count_other": "このスクワッドのメンバー {count}名",
     "add_member_button": "メンバーを追加",
     "create_agent_button": "エージェントを作成",
     "leader_chip": "リーダー",
@@ -64,17 +64,17 @@
     "status_offline": "オフライン",
     "status_unstable": "不安定",
     "issue_status_blocked": "ブロック中",
-    "active_issue_more": "他 {{count}}件",
-    "last_active_label": "最終アクティブ {{time}}",
+    "active_issue_more": "他 {count}件",
+    "last_active_label": "最終アクティブ {time}",
     "status_archived": "アーカイブ済み"
   },
   "profile_card": {
     "unavailable": "スクワッドを利用できません",
     "detail_link": "詳細 →",
     "archived": "アーカイブ済み",
-    "member_count_other": "メンバー {{count}}名",
+    "member_count_other": "メンバー {count}名",
     "members_section": "メンバー",
-    "more_members_other": "他 {{count}}名"
+    "more_members_other": "他 {count}名"
   },
   "instructions_tab": {
     "description": "スクワッドの指示は、リーダーエージェントがこのスクワッドに割り当てられたイシューに取り組むたびに、そのプロンプトに挿入されます。スクワッド全体の方針、作業上の取り決め、リーダーがすべてのタスクで従うべきコンテキストを伝えるために使用します。",
@@ -93,7 +93,7 @@
     "section_columns": "列",
     "result_count_title": "該当スカッド / すべてのスカッド",
     "filter_label": "フィルター",
-    "filter_active_count_other": "{{count}} 件のフィルター",
+    "filter_active_count_other": "{count} 件のフィルター",
     "clear_filters": "フィルターをクリア"
   }
 }

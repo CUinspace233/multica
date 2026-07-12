@@ -11,6 +11,17 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const countAllWorkspaces = `-- name: CountAllWorkspaces :one
+SELECT count(*)::bigint FROM workspace
+`
+
+func (q *Queries) CountAllWorkspaces(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countAllWorkspaces)
+	var column_1 int64
+	err := row.Scan(&column_1)
+	return column_1, err
+}
+
 const createWorkspace = `-- name: CreateWorkspace :one
 INSERT INTO workspace (name, slug, description, context, issue_prefix)
 VALUES ($1, $2, $3, $4, $5)
@@ -124,6 +135,73 @@ func (q *Queries) IncrementIssueCounter(ctx context.Context, id pgtype.UUID) (in
 	var issue_counter int32
 	err := row.Scan(&issue_counter)
 	return issue_counter, err
+}
+
+const listAllWorkspacesAdmin = `-- name: ListAllWorkspacesAdmin :many
+
+SELECT
+    w.id, w.name, w.slug, w.description, w.created_at, w.updated_at,
+    w.issue_prefix, w.issue_counter, w.avatar_url,
+    (SELECT count(*)::bigint FROM member m WHERE m.workspace_id = w.id) AS member_count
+FROM workspace w
+ORDER BY w.created_at DESC
+LIMIT $1 OFFSET $2
+`
+
+type ListAllWorkspacesAdminParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type ListAllWorkspacesAdminRow struct {
+	ID           pgtype.UUID        `json:"id"`
+	Name         string             `json:"name"`
+	Slug         string             `json:"slug"`
+	Description  pgtype.Text        `json:"description"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt    pgtype.Timestamptz `json:"updated_at"`
+	IssuePrefix  string             `json:"issue_prefix"`
+	IssueCounter int32              `json:"issue_counter"`
+	AvatarUrl    pgtype.Text        `json:"avatar_url"`
+	MemberCount  int64              `json:"member_count"`
+}
+
+// =============================================================================
+// Enterprise fork (CUinspace233/multica): global admin queries.
+// =============================================================================
+// Lists every workspace across all users for the admin dashboard,
+// newest first, plus the member count for each. The admin UI uses
+// this to render the workspaces table. Pagination handled in the
+// handler.
+func (q *Queries) ListAllWorkspacesAdmin(ctx context.Context, arg ListAllWorkspacesAdminParams) ([]ListAllWorkspacesAdminRow, error) {
+	rows, err := q.db.Query(ctx, listAllWorkspacesAdmin, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListAllWorkspacesAdminRow{}
+	for rows.Next() {
+		var i ListAllWorkspacesAdminRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Slug,
+			&i.Description,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.IssuePrefix,
+			&i.IssueCounter,
+			&i.AvatarUrl,
+			&i.MemberCount,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const listWorkspaces = `-- name: ListWorkspaces :many

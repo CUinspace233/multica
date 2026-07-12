@@ -164,6 +164,28 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 	cfSigner := auth.NewCloudFrontSignerFromEnv()
 	origins := allowedOrigins()
 
+	// Enterprise fork (CUinspace233/multica): warm the allowlist cache
+	// before handler.New so the signup gate sees the runtime-mutable
+	// state on the very first /auth/send-code. If the table is empty we
+	// seed it from the env vars so the previous behavior is preserved
+	// across the upgrade. A nil ctx is impossible here — we use context.
+	startCtx := context.Background()
+	allowlistH := &handler.AdminAllowlistHandler{Queries: queries}
+	allowlistCounts, _ := queries.CountAllowlistByKind(startCtx)
+	if len(allowlistCounts) == 0 {
+		if err := allowlistH.SeedFromEnv(startCtx,
+			splitAndTrim(os.Getenv("ALLOWED_EMAILS")),
+			splitAndTrim(os.Getenv("ALLOWED_EMAIL_DOMAINS")),
+		); err != nil {
+			slog.Warn("allowlist seed failed; falling back to env-only signup gate", "err", err)
+			_ = allowlistH.Load(startCtx)
+		}
+	} else {
+		if err := allowlistH.Load(startCtx); err != nil {
+			slog.Warn("allowlist load failed; falling back to env-only signup gate", "err", err)
+		}
+	}
+
 	signupConfig := handler.Config{
 		AllowSignup:              os.Getenv("ALLOW_SIGNUP") != "false",
 		AllowedEmails:            splitAndTrim(os.Getenv("ALLOWED_EMAILS")),
@@ -178,6 +200,7 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 		AttachmentFrameAncestors: origins,
 	}
 	h := handler.New(queries, pool, hub, bus, emailSvc, store, cfSigner, analyticsClient, signupConfig, daemonHub)
+	h.Allowlist = allowlistH
 	h.Metrics = opts.BusinessMetrics
 	h.FeatureFlags = opts.FeatureFlags
 	if opts.FeatureFlags != nil {
@@ -762,6 +785,35 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.Auth(queries, patCache, cloudPATVerifier))
 		r.Use(middleware.RefreshCloudFrontCookies(cfSigner))
+
+		// --- Enterprise fork (CUinspace233/multica): global admin surface.
+		// Mounted AFTER middleware.Auth so RequireSuperuser can read the
+		// is_admin claim off the JWT context. The handlers themselves
+		// are constructed once at startup and reused for every request.
+		adminUsersH := &handler.AdminUsersHandler{Queries: queries}
+		adminWorkspacesH := &handler.AdminWorkspacesHandler{Queries: queries}
+		adminRuntimesH := &handler.AdminRuntimesHandler{Queries: queries}
+		adminAllowlistH := allowlistH
+		adminInstanceH := &handler.AdminInstanceHandler{
+			Queries:      queries,
+			StartTime:    time.Now(),
+			InstanceName: strings.TrimSpace(os.Getenv("MULTICA_INSTANCE_NAME")),
+			SignupOpen:   signupConfig.AllowSignup,
+			Allowlist:    adminAllowlistH,
+		}
+		r.Route("/api/admin", func(r chi.Router) {
+			r.Use(handler.RequireSuperuser)
+			r.Get("/instance", adminInstanceH.Get)
+			r.Get("/users", adminUsersH.List)
+			r.Get("/users/{id}", adminUsersH.Get)
+			r.Post("/users/{id}/admin", adminUsersH.SetAdmin)
+			r.Post("/users/{id}/disabled", adminUsersH.SetDisabled)
+			r.Get("/workspaces", adminWorkspacesH.List)
+			r.Get("/runtimes", adminRuntimesH.List)
+			r.Get("/allowlist", adminAllowlistH.List)
+			r.Post("/allowlist", adminAllowlistH.Add)
+			r.Delete("/allowlist", adminAllowlistH.Remove)
+		})
 
 		// --- User-scoped routes (no workspace context required) ---
 		r.Get("/api/me", h.GetMe)

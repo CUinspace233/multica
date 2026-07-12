@@ -5,8 +5,8 @@
     "learn_more": "了解更多 →",
     "new_agent": "新建智能体",
     "search_placeholder": "搜索智能体...",
-    "show_archived": "显示已归档（{{count}}）→",
-    "of_total": "{{visible}} / {{total}}",
+    "show_archived": "显示已归档（{count}）→",
+    "of_total": "{visible} / {total}",
     "list_load_failed": "无法加载智能体列表",
     "list_load_failed_default": "获取智能体列表时出错。",
     "try_again": "重试"
@@ -44,20 +44,20 @@
   },
   "no_matches": {
     "title": "无匹配项",
-    "search_archived": "没有已归档智能体匹配\"{{query}}\"。",
+    "search_archived": "没有已归档智能体匹配\"{query}\"。",
     "no_archived": "还没有已归档智能体。",
-    "search_active": "没有智能体匹配\"{{query}}\"。",
-    "search_active_filtered": "在该筛选下没有智能体匹配\"{{query}}\"。",
+    "search_active": "没有智能体匹配\"{query}\"。",
+    "search_active_filtered": "在该筛选下没有智能体匹配\"{query}\"。",
     "no_filter_match": "该筛选下没有匹配的智能体。",
-    "search_runtime_filtered": "\"{{machine}}\"上没有匹配\"{{query}}\"的智能体。",
-    "runtime_filtered": "\"{{machine}}\"上还没有智能体。"
+    "search_runtime_filtered": "\"{machine}\"上没有匹配\"{query}\"的智能体。",
+    "runtime_filtered": "\"{machine}\"上还没有智能体。"
   },
   "runtime_filter": {
     "all": "全部运行时",
     "section_local": "本机",
     "section_remote": "远程",
     "section_cloud": "云端",
-    "agent_count_other": "{{count}} 个智能体",
+    "agent_count_other": "{count} 个智能体",
     "empty": "还没有机器"
   },
   "columns": {
@@ -79,15 +79,15 @@
     "fallback_runtime_cloud": "云端",
     "fallback_runtime_local": "本地",
     "actions_aria": "行操作",
-    "task_count_other": "{{count}} 个任务"
+    "task_count_other": "{count} 个任务"
   },
   "activity_tooltip": {
     "created_today": "今天创建",
-    "created_days_ago_other": "{{count}} 天前创建",
+    "created_days_ago_other": "{count} 天前创建",
     "last_7_days": "近 7 天",
     "no_activity": "无活动",
-    "runs_other": "{{count}} 次运行",
-    "failed_suffix": " · {{count}} 次失败（{{percent}}%）"
+    "runs_other": "{count} 次运行",
+    "failed_suffix": " · {count} 次失败（{percent}%）"
   },
   "row_actions": {
     "cancel_all_tasks": "取消全部 task",
@@ -99,18 +99,18 @@
     "agent_restored_toast": "已恢复智能体",
     "restore_failed_toast": "恢复智能体失败",
     "no_tasks_to_cancel_toast": "没有要取消的活动 task",
-    "cancelled_tasks_toast_other": "已取消 {{count}} 个 task",
+    "cancelled_tasks_toast_other": "已取消 {count} 个 task",
     "cancel_failed_toast": "取消 task 失败",
-    "cancel_dialog_title": "取消\"{{name}}\"的全部 task？",
+    "cancel_dialog_title": "取消\"{name}\"的全部 task？",
     "cancel_dialog_no_tasks": "没有要取消的活动 task。",
-    "cancel_dialog_running_other": "{{count}} 个进行中",
-    "cancel_dialog_queued_other": "{{count}} 个排队中",
-    "cancel_dialog_impact_other": "将取消 {{summary}} 个 task。",
+    "cancel_dialog_running_other": "{count} 个进行中",
+    "cancel_dialog_queued_other": "{count} 个排队中",
+    "cancel_dialog_impact_other": "将取消 {summary} 个 task。",
     "cancel_dialog_running_note": " 进行中的 task 最多需要 5 秒才能完全停止。",
     "cancel_dialog_irreversible": " 已取消的 task 无法恢复。",
     "cancel_dialog_keep": "保留",
     "cancel_dialog_confirm": "取消全部 task",
-    "archive_dialog_title": "归档\"{{name}}\"？",
+    "archive_dialog_title": "归档\"{name}\"？",
     "archive_dialog_description": "归档后这个智能体将无法被分配或提及，进行中的 task 会被取消。所有历史会被保留，可以稍后恢复。",
     "archive_dialog_cancel": "取消",
     "archive_dialog_confirm": "归档"
@@ -126,7 +126,7 @@
     "archived_banner": "该智能体已归档，无法被分配或提及。",
     "restore": "恢复",
     "archive_dialog_title": "归档智能体？",
-    "archive_dialog_description": "\"{{name}}\"将被归档，无法被分配或提及，但所有历史会被保留。可以稍后恢复。",
+    "archive_dialog_description": "\"{name}\"将被归档，无法被分配或提及，但所有历史会被保留。可以稍后恢复。",
     "archive_dialog_cancel": "取消",
     "archive_dialog_confirm": "归档",
     "more_archive": "归档智能体",
@@ -167,28 +167,28 @@
     "trigger_label": "附加"
   },
   "pickers": {
-    "concurrency_tooltip": "并发 · 最多 {{value}} 个并行 task",
-    "concurrency_range": "最大并行 task 数（{{min}}–{{max}}）",
+    "concurrency_tooltip": "并发 · 最多 {value} 个并行 task",
+    "concurrency_range": "最大并行 task 数（{min}–{max}）",
     "runtime_none": "无运行时",
-    "runtime_tooltip": "运行时 · {{name}} · {{status}}",
+    "runtime_tooltip": "运行时 · {name} · {status}",
     "runtime_tooltip_none": "运行时 · 未选择",
     "runtime_online": "在线",
     "runtime_offline": "离线",
-    "runtime_owned_by": "{{name}} 的",
+    "runtime_owned_by": "{name} 的",
     "runtime_empty": "暂无运行时",
     "model_default": "默认",
-    "model_tooltip": "模型 · {{value}}",
+    "model_tooltip": "模型 · {value}",
     "model_managed_by_runtime": "由运行时管理",
     "model_search_placeholder": "搜索或输入模型 ID",
     "model_discovering": "正在发现模型...",
     "model_empty": "暂无可用模型",
     "model_empty_with_dot": "暂无可用模型。",
-    "model_custom_tooltip": "使用\"{{value}}\"作为自定义模型 ID",
-    "model_custom_use": "使用\"{{value}}\"",
+    "model_custom_tooltip": "使用\"{value}\"作为自定义模型 ID",
+    "model_custom_use": "使用\"{value}\"",
     "model_clear": "清除（使用提供方默认）",
     "model_clear_title": "清除并回退到运行时的提供方默认",
     "thinking_default": "跟随 CLI 配置",
-    "thinking_tooltip": "思考 · {{value}}",
+    "thinking_tooltip": "思考 · {value}",
     "thinking_clear": "跟随 CLI 配置",
     "thinking_clear_title": "清除覆盖，让本地 CLI（claude/codex）的配置决定推理级别"
   },
@@ -222,7 +222,7 @@
     "title_create": "创建智能体",
     "title_duplicate": "复制智能体",
     "description_create": "为工作区创建一个新的 AI 智能体。",
-    "description_duplicate": "基于\"{{name}}\"创建一个新智能体。指令、环境变量和 skill 会一并复制。",
+    "description_duplicate": "基于\"{name}\"创建一个新智能体。指令、环境变量和 skill 会一并复制。",
     "name_label": "名称",
     "name_placeholder": "例如：深度研究智能体",
     "description_label": "描述",
@@ -252,8 +252,8 @@
     "creating": "创建中...",
     "cancel": "取消",
     "create_failed_toast": "创建智能体失败",
-    "skill_attach_failed_toast": "智能体已创建，但 skill 关联失败：{{error}}",
-    "squad_join_failed_toast": "智能体「{{name}}」已创建，但加入小队失败：{{error}}。你可以在 Members 标签里手动添加。",
+    "skill_attach_failed_toast": "智能体已创建，但 skill 关联失败：{error}",
+    "squad_join_failed_toast": "智能体「{name}」已创建，但加入小队失败：{error}。你可以在 Members 标签里手动添加。",
     "instructions": {
       "label": "指令",
       "placeholder_blank": "点击撰写指令…",
@@ -264,7 +264,7 @@
     "skills_section": {
       "label": "Skills",
       "placeholder": "从工作区添加 skill",
-      "selected_other": "已选 {{count}} 个 —— 点击修改",
+      "selected_other": "已选 {count} 个 —— 点击修改",
       "collapse": "收起",
       "list_empty_multi": "工作区还没有 skill。请先创建或导入一个。",
       "list_loading": "加载中…",
@@ -304,7 +304,7 @@
       "duplicate_keys_toast": "环境变量 key 重复",
       "saved_toast": "已保存环境变量",
       "save_failed_toast": "保存环境变量失败",
-      "not_revealed_title_other": "已配置 {{count}} 个变量",
+      "not_revealed_title_other": "已配置 {count} 个变量",
       "not_revealed_empty": "尚未配置环境变量。",
       "not_revealed_hint": "在解锁前所有值保持隐藏。每次解锁与编辑都会写入工作区审计日志。",
       "reveal_action": "解锁并编辑",
@@ -326,7 +326,7 @@
       "placeholder": "{\n  \"mcpServers\": {\n    \"fetch\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-server-fetch\"]\n    }\n  }\n}",
       "editor_aria": "MCP 配置 JSON 编辑器",
       "clear_action": "清空",
-      "invalid_json": "JSON 无效：{{error}}",
+      "invalid_json": "JSON 无效：{error}",
       "invalid_not_object": "MCP 配置必须是 JSON 对象（例如 {\"mcpServers\": …}）。",
       "saved_toast": "已保存 MCP 配置",
       "save_failed_toast": "保存 MCP 配置失败",
@@ -341,7 +341,7 @@
       "empty_hint": "你还没连接任何第三方服务。先去授权一个，再回到这里勾选允许。",
       "empty_link_to_settings": "去 设置 → 集成 连一个",
       "connected": "已连接",
-      "toggle_aria": "允许该 agent 使用 {{toolkit}}",
+      "toggle_aria": "允许该 agent 使用 {toolkit}",
       "saving": "正在保存…",
       "save_failed_toast": "保存失败，请重试",
       "redacted_title": "已配置 —— 对你隐藏",
@@ -383,7 +383,7 @@
       "add_dialog_empty_partial": "已无可添加的 skill —— 全部都已分配给该智能体。",
       "add_dialog_saving": "添加中…",
       "add_dialog_confirm_default": "添加",
-      "add_dialog_confirm_other": "添加 {{count}} 个 skill",
+      "add_dialog_confirm_other": "添加 {count} 个 skill",
       "add_dialog_cancel": "取消",
       "add_failed_toast": "添加 skill 失败"
     },
@@ -396,19 +396,19 @@
       "section_last_30d": "近 30 天",
       "section_recent": "最近工作",
       "subtitle_no_active": "无进行中的工作",
-      "subtitle_active_other": "{{count}} 个进行中的 task",
+      "subtitle_active_other": "{count} 个进行中的 task",
       "subtitle_performance": "表现",
       "subtitle_no_recent": "还没有完成的 task",
-      "subtitle_recent_progress": "{{shown}} / {{total}}",
-      "subtitle_recent_latest": "最近 {{count}} 条",
+      "subtitle_recent_progress": "{shown} / {total}",
+      "subtitle_recent_latest": "最近 {count} 条",
       "empty_now": "这个智能体当前没有在跑任何 task。",
       "empty_30d": "近 30 天没有任何完成记录。",
       "empty_recent": "这个智能体还没有完成过任何 task。",
       "show_more": "查看更多 →",
       "runs_other": "次运行",
-      "success_pct": "{{percent}}% 成功",
-      "avg_duration": "平均 {{value}}",
-      "failed_count": "{{count}} 次失败",
+      "success_pct": "{percent}% 成功",
+      "avg_duration": "平均 {value}",
+      "failed_count": "{count} 次失败",
       "source_issue": "Issue",
       "source_chat": "聊天",
       "source_autopilot": "自动化",
@@ -417,7 +417,7 @@
       "source_creating_issue": "正在创建 issue",
       "source_chat_session": "聊天会话",
       "source_autopilot_run": "自动化运行",
-      "issue_short_fallback": "Issue {{prefix}}...",
+      "issue_short_fallback": "Issue {prefix}...",
       "triggered_by": "触发来源",
       "open_issue_aria": "打开 issue",
       "open_issue_tooltip": "打开 issue",
@@ -426,16 +426,16 @@
       "cancel_task_tooltip": "取消 task",
       "cancelling_tooltip": "正在取消...",
       "cancel_failed_toast": "取消 task 失败",
-      "started_prefix": "{{when}}启动",
-      "dispatched_prefix": "{{when}}派发",
-      "queued_prefix": "{{when}}排队"
+      "started_prefix": "{when}启动",
+      "dispatched_prefix": "{when}派发",
+      "queued_prefix": "{when}排队"
     }
   },
   "char_counter": {
-    "over_limit": " · 超出 {{count}} 字"
+    "over_limit": " · 超出 {count} 字"
   },
   "presence": {
-    "queue_badge": "+{{count}} 排队"
+    "queue_badge": "+{count} 排队"
   },
   "visibility": {
     "private": {
@@ -451,7 +451,7 @@
     "tooltip": "访问权限 · 谁可以运行该智能体",
     "trigger_private": "仅自己",
     "trigger_workspace": "工作区",
-    "trigger_members_count": "{{count}} 人",
+    "trigger_members_count": "{count} 人",
     "trigger_members_empty": "指定成员",
     "trigger_team": "团队",
     "private_title": "私有",
@@ -491,9 +491,9 @@
     "status_failed": "失败",
     "filter": "筛选",
     "clear_filters": "清除筛选",
-    "tool_calls_other": "{{count}} 次工具调用",
-    "events_other": "{{count}} 个事件",
-    "events_filtered": "{{shown}} / {{total}} 个事件",
+    "tool_calls_other": "{count} 次工具调用",
+    "events_other": "{count} 个事件",
+    "events_filtered": "{shown} / {total} 个事件",
     "copy_all": "全部复制",
     "copy_filtered": "复制筛选结果",
     "copied": "已复制",
@@ -516,13 +516,13 @@
   },
   "last_active": {
     "today": "今天",
-    "days_ago_other": "{{count}} 天前",
+    "days_ago_other": "{count} 天前",
     "none": "30 天内无活动"
   },
   "toolbar": {
     "result_count_title": "当前结果 / 范围内全部",
     "filter_label": "筛选",
-    "filter_active_count_other": "{{count}} 项筛选",
+    "filter_active_count_other": "{count} 项筛选",
     "clear_filters": "清除筛选",
     "section_availability": "可用性",
     "section_runtime": "运行时",
@@ -535,7 +535,7 @@
     "section_model": "模型"
   },
   "actions": {
-    "selected_other": "已选 {{count}} 项",
+    "selected_other": "已选 {count} 项",
     "clear_selection": "清除选择"
   }
 }

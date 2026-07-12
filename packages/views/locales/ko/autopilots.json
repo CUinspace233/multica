@@ -36,8 +36,8 @@
   "relative_date": {
     "today": "오늘",
     "one_day_ago": "1일 전",
-    "days_ago": "{{count}}일 전",
-    "months_ago": "{{count}}개월 전"
+    "days_ago": "{count}일 전",
+    "months_ago": "{count}개월 전"
   },
   "templates": {
     "daily_news": {
@@ -95,7 +95,7 @@
     "toast_delete_failed": "오토파일럿을 삭제하지 못했습니다",
     "delete_dialog": {
       "title": "오토파일럿 삭제",
-      "description": "\"{{title}}\" 오토파일럿과 트리거, 실행 기록이 영구 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "description": "\"{title}\" 오토파일럿과 트리거, 실행 기록이 영구 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
       "cancel": "취소",
       "confirm": "삭제",
       "deleting": "삭제하는 중..."
@@ -133,14 +133,14 @@
     "view_log": "실행 로그 보기",
     "skipped_group": {
       "label": "건너뜀",
-      "summary": "건너뛴 실행 {{count}}개"
+      "summary": "건너뛴 실행 {count}개"
     }
   },
   "webhook_payload": {
     "label": "Webhook 이벤트:",
     "unknown_event": "webhook.received",
     "payload": "Payload",
-    "content_type": "Content-Type: {{type}}",
+    "content_type": "Content-Type: {type}",
     "copy": "복사",
     "copied": "Webhook payload를 복사했습니다",
     "copied_short": "복사했습니다",
@@ -155,7 +155,7 @@
   "trigger_row": {
     "disabled_badge": "비활성",
     "deprecated_badge": "지원 중단",
-    "next_label": "다음: {{date}}",
+    "next_label": "다음: {date}",
     "webhook_url_label": "Webhook URL",
     "copy_url": "URL 복사",
     "url_copied": "Webhook URL을 복사했습니다",
@@ -182,7 +182,7 @@
     "section_title": "Webhook 전달",
     "empty": "아직 Webhook 전달 기록이 없습니다. Webhook URL로 POST를 보내면 여기에 표시됩니다.",
     "row": {
-      "attempts": "{{count}}회 시도",
+      "attempts": "{count}회 시도",
       "replay_badge": "재실행"
     },
     "status": {
@@ -258,11 +258,11 @@
     "saving": "저장하는 중...",
     "toast_created": "오토파일럿을 만들었습니다",
     "toast_create_partial": "오토파일럿은 만들었지만 일정을 저장하지 못했습니다",
-    "toast_create_partial_with_reason": "오토파일럿은 만들었지만 일정을 저장하지 못했습니다: {{reason}}",
+    "toast_create_partial_with_reason": "오토파일럿은 만들었지만 일정을 저장하지 못했습니다: {reason}",
     "toast_create_failed": "오토파일럿을 만들지 못했습니다",
     "toast_updated": "오토파일럿을 업데이트했습니다",
     "toast_update_partial": "오토파일럿은 업데이트했지만 일정을 저장하지 못했습니다",
-    "toast_update_partial_with_reason": "오토파일럿은 업데이트했지만 일정을 저장하지 못했습니다: {{reason}}",
+    "toast_update_partial_with_reason": "오토파일럿은 업데이트했지만 일정을 저장하지 못했습니다: {reason}",
     "toast_update_failed": "오토파일럿을 업데이트하지 못했습니다",
     "section_agent": "에이전트",
     "section_assignee": "담당자",
@@ -347,24 +347,24 @@
     "timezone_label": "시간대",
     "days_label": "요일",
     "summary": {
-      "hourly": "매시간 · :{{min}}",
-      "daily": "매일 {{time}}",
-      "weekdays": "평일 {{time}}",
-      "weekly": "{{days}} {{time}}",
+      "hourly": "매시간 · :{min}",
+      "daily": "매일 {time}",
+      "weekdays": "평일 {time}",
+      "weekly": "{days} {time}",
       "custom": "사용자 지정 cron",
       "no_days": "—"
     },
     "describe": {
-      "hourly": "매시간 :{{min}}에 실행",
-      "daily": "매일 {{time}} {{offset}}에 실행",
-      "weekdays": "평일 {{time}} {{offset}}에 실행",
-      "weekly": "매주 {{days}} {{time}} {{offset}}에 실행",
-      "custom": "사용자 지정 일정: {{cron}}"
+      "hourly": "매시간 :{min}에 실행",
+      "daily": "매일 {time} {offset}에 실행",
+      "weekdays": "평일 {time} {offset}에 실행",
+      "weekly": "매주 {days} {time} {offset}에 실행",
+      "custom": "사용자 지정 일정: {cron}"
     },
     "countdown": {
-      "days_hours": "{{days}}일 {{hours}}시간",
-      "hours_minutes": "{{hours}}시간 {{minutes}}분",
-      "minutes": "{{minutes}}분",
+      "days_hours": "{days}일 {hours}시간",
+      "hours_minutes": "{hours}시간 {minutes}분",
+      "minutes": "{minutes}분",
       "less_than_minute": "1분 미만"
     }
   },
@@ -381,7 +381,7 @@
   "toolbar": {
     "result_count_title": "일치하는 자동화 / 전체 자동화",
     "filter_label": "필터",
-    "filter_active_count_other": "필터 {{count}}개",
+    "filter_active_count_other": "필터 {count}개",
     "clear_filters": "필터 지우기",
     "section_assignee": "담당",
     "section_mode": "모드",
@@ -398,11 +398,11 @@
     "pause": "일시중지",
     "resume": "재개",
     "delete": "삭제",
-    "selected_other": "{{count}}개 선택됨",
+    "selected_other": "{count}개 선택됨",
     "clear_selection": "선택 해제",
     "delete_dialog": {
       "title": "자동화를 삭제할까요?",
-      "description_other": "자동화 {{count}}개와 실행 기록이 영구 삭제됩니다.",
+      "description_other": "자동화 {count}개와 실행 기록이 영구 삭제됩니다.",
       "warning": "이 작업은 되돌릴 수 없습니다.",
       "cancel": "취소",
       "confirm": "영구 삭제",

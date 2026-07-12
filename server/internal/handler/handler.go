@@ -197,7 +197,13 @@ type Handler struct {
 	// unless Slack is configured; GetChatChannelHistory then reports "no channel
 	// integration". A future platform satisfies the same reader interface.
 	SlackHistory ChatChannelHistoryReader
-	cfg          Config
+	// Allowlist is the enterprise-fork cache for the runtime-mutable
+	// signup allowlist. Set by cmd/server/router.go after handler.New; the
+	// signup gate (checkSignupAllowed) consults it before falling back to
+	// cfg.AllowedEmails / AllowedEmailDomains. Nil-safe — when unset, the
+	// env-driven behavior is preserved.
+	Allowlist *AdminAllowlistHandler
+	cfg       Config
 }
 
 func New(queries *db.Queries, txStarter txStarter, hub *realtime.Hub, bus *events.Bus, emailService *service.EmailService, store storage.Storage, cfSigner *auth.CloudFrontSigner, analyticsClient analytics.Client, cfg Config, daemonHubs ...*daemonws.Hub) *Handler {

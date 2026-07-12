@@ -97,24 +97,27 @@ vi.mock("@multica/ui/components/common/actor-avatar", () => ({ ActorAvatar: () =
 vi.mock("@multica/core/auth", () => ({
   useAuthStore: (selector: (state: { user: { id: string } }) => unknown) => selector({ user: { id: "user-1" } }),
 }));
+const fullAcmePaths = {
+  inbox: () => "/acme/inbox",
+  myIssues: () => "/acme/my-issues",
+  issues: () => "/acme/issues",
+  projects: () => "/acme/projects",
+  autopilots: () => "/acme/autopilots",
+  agents: () => "/acme/agents",
+  squads: () => "/acme/squads",
+  usage: () => "/acme/usage",
+  runtimes: () => "/acme/runtimes",
+  skills: () => "/acme/skills",
+  settings: () => "/acme/settings",
+  issueDetail: (id: string) => `/acme/issues/${id}`,
+  projectDetail: (id: string) => `/acme/projects/${id}`,
+};
+
 vi.mock("@multica/core/paths", () => ({
-  paths: { workspace: (slug: string) => ({ issues: () => `/${slug}/issues` }) },
+  paths: { workspace: () => fullAcmePaths },
   useCurrentWorkspace: () => ({ id: "ws-1", name: "Acme", slug: "acme" }),
-  useWorkspacePaths: () => ({
-    inbox: () => "/acme/inbox",
-    myIssues: () => "/acme/my-issues",
-    issues: () => "/acme/issues",
-    projects: () => "/acme/projects",
-    autopilots: () => "/acme/autopilots",
-    agents: () => "/acme/agents",
-    squads: () => "/acme/squads",
-    usage: () => "/acme/usage",
-    runtimes: () => "/acme/runtimes",
-    skills: () => "/acme/skills",
-    settings: () => "/acme/settings",
-    issueDetail: (id: string) => `/acme/issues/${id}`,
-    projectDetail: (id: string) => `/acme/projects/${id}`,
-  }),
+  useWorkspaceSlug: () => "acme",
+  useWorkspacePaths: () => fullAcmePaths,
 }));
 vi.mock("@multica/core/api", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@multica/core/api")>();

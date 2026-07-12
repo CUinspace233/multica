@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { GitHubMark } from "./github-mark";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@multica/ui/components/ui/tabs";
+import { PageHeader } from "../../layout/page-header";
 import { useCurrentWorkspace } from "@multica/core/paths";
 import { useNavigation } from "../../navigation";
 import { AccountTab } from "./account-tab";
@@ -118,16 +119,20 @@ export function SettingsPage({ extraAccountTabs }: SettingsPageProps = {}) {
   };
 
   return (
-    <Tabs
-      value={activeTab}
-      onValueChange={handleTabChange}
-      orientation="vertical"
-      className="flex-1 min-h-0 gap-0 flex flex-col md:flex-row md:overflow-hidden overflow-y-auto"
-    >
-      {/* Left nav (stacks on top on mobile, sidebar on md+) */}
-      <div className="shrink-0 md:w-52 border-b md:border-b-0 md:border-r md:overflow-y-auto p-3 md:p-4">
-        <h1 className="text-sm font-semibold mb-4 px-2">{t(($) => $.page.title)}</h1>
-        <TabsList variant="line" className="flex-col items-stretch w-full">
+    <div className="flex flex-1 min-h-0 flex-col">
+      <PageHeader className="gap-2">
+        <Settings className="h-4 w-4 text-muted-foreground" />
+        <h1 className="text-sm font-medium">{t(($) => $.page.title)}</h1>
+      </PageHeader>
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        orientation="vertical"
+        className="flex-1 min-h-0 gap-0 flex flex-col md:flex-row md:overflow-hidden overflow-y-auto"
+      >
+        {/* Left nav (stacks on top on mobile, sidebar on md+) */}
+        <div className="shrink-0 md:w-52 border-b md:border-b-0 md:border-r md:overflow-y-auto p-3 md:p-4">
+          <TabsList variant="line" className="flex-col items-stretch w-full">
           {/* My Account group */}
           <span className="px-2 pb-1 pt-2 text-xs font-medium text-muted-foreground">
             {t(($) => $.page.my_account)}
@@ -183,5 +188,6 @@ export function SettingsPage({ extraAccountTabs }: SettingsPageProps = {}) {
         </div>
       </div>
     </Tabs>
+    </div>
   );
 }
