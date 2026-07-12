@@ -1,3 +1,3 @@
--- Reverse 135_runtime_allowlist
+-- Reverse 166_runtime_allowlist
 
 DROP TABLE IF EXISTS runtime_allowlist;

@@ -1,4 +1,4 @@
--- Reverse 134_user_is_admin_and_disabled
+-- Reverse 164_user_is_admin_and_disabled
 
 DROP INDEX IF EXISTS user_disabled_at_idx;
 DROP INDEX IF EXISTS user_is_admin_idx;
