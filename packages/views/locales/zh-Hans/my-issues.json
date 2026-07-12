@@ -19,7 +19,7 @@
     "filter_button": "筛选",
     "filter_status": "状态",
     "filter_priority": "优先级",
-    "issue_count_other": "{count} 个 issue",
+    "issue_count_other": "{{count}} 个 issue",
     "reset_filters": "重置所有筛选",
     "display_settings": "显示设置",
     "grouping": "分组",

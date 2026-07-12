@@ -25,14 +25,14 @@
     "new_issue": "새 이슈",
     "new_project": "새 프로젝트",
     "copy_issue_link": "이슈 링크 복사",
-    "copy_identifier": "식별자 복사 ({identifier})",
+    "copy_identifier": "식별자 복사 ({{identifier}})",
     "switch_to_light": "라이트 테마로 전환",
     "switch_to_dark": "다크 테마로 전환",
     "use_system_theme": "시스템 테마 사용"
   },
   "toast": {
     "link_copied": "링크를 복사했습니다",
-    "copied_identifier": "{identifier}를 복사했습니다"
+    "copied_identifier": "{{identifier}}를 복사했습니다"
   },
   "empty": {
     "no_results": "검색 결과가 없습니다.",

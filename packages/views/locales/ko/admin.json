@@ -3,6 +3,10 @@
   "page_title": "Instance admin",
   "page_subtitle": "Manage users, workspaces, daemon runtimes, and the signup allowlist across this instance.",
   "back_to_workspaces": "워크스페이스로 돌아가기",
+  "groups": {
+    "identity": "Instance",
+    "access": "Access control"
+  },
   "tabs": {
     "users": "Users",
     "workspaces": "Workspaces",
@@ -33,12 +37,14 @@
     "enable": "Enable account",
     "copy_id": "Copy ID",
     "copy_id_done": "ID copied",
+    "you_badge": "you",
     "actions": "Actions",
     "toast_promoted": "Promoted to superuser",
     "toast_demoted": "Demoted to member",
     "toast_disabled": "Account disabled",
     "toast_enabled": "Account enabled",
     "toast_failed": "Action failed",
+    "more_actions_aria": "More actions",
     "cannot_disable_self_title": "Disable your own account?",
     "cannot_disable_self_description": "Disabling yourself will lock you out. Ask another superuser to re-enable you.",
     "confirm_disable_self": "Disable anyway",
@@ -47,8 +53,8 @@
   "workspaces": {
     "search_placeholder": "Search by name or slug",
     "no_workspaces": "No workspaces yet.",
-    "members": "{count, plural, =0 {No members} =1 {1 member} other {# members}}",
-    "issues": "{count, plural, =0 {No issues} =1 {1 issue} other {# issues}}"
+    "members_other": "{{count}} members",
+    "issues_other": "{{count}} issues"
   },
   "runtimes": {
     "search_placeholder": "Search by name or owner",

@@ -7,13 +7,13 @@
     "period_label": "期間"
   },
   "kpi": {
-    "cost_label": "コスト · {days}日",
-    "tokens_label": "トークン · {days}日",
-    "tokens_hint": "入力 {input} · 出力 {output}",
-    "run_time_label": "実行時間 · {days}日",
-    "run_time_hint": "{tasks} 件のタスク全体",
-    "tasks_label": "タスク · {days}日",
-    "tasks_hint": "{failed} 件失敗"
+    "cost_label": "コスト · {{days}}日",
+    "tokens_label": "トークン · {{days}}日",
+    "tokens_hint": "入力 {{input}} · 出力 {{output}}",
+    "run_time_label": "実行時間 · {{days}}日",
+    "run_time_hint": "{{tasks}} 件のタスク全体",
+    "tasks_label": "タスク · {{days}}日",
+    "tasks_hint": "{{failed}} 件失敗"
   },
   "dim": {
     "label": "単位",
@@ -36,12 +36,12 @@
     "title_tokens": "週別トークン",
     "title_time": "週別実行時間",
     "title_tasks": "週別タスク",
-    "partial_label": "{range} (一部 · 7日中 {covered}日)"
+    "partial_label": "{{range}} (一部 · 7日中 {{covered}}日)"
   },
   "leaderboard": {
     "title": "リーダーボード",
-    "caption": "{count} 件のエージェント",
-    "caption_with_deleted": "{count} 件のエージェント · 削除済み {deleted} 件",
+    "caption": "{{count}} 件のエージェント",
+    "caption_with_deleted": "{{count}} 件のエージェント · 削除済み {{deleted}} 件",
     "deleted_agents": "削除済みエージェント",
     "header_agent": "エージェント",
     "header_tokens": "トークン",

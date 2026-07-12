@@ -53,8 +53,10 @@
   "workspaces": {
     "search_placeholder": "Search by name or slug",
     "no_workspaces": "No workspaces yet.",
-    "members": "{count, plural, =0 {No members} =1 {1 member} other {# members}}",
-    "issues": "{count, plural, =0 {No issues} =1 {1 issue} other {# issues}}"
+    "members_one": "{{count}} member",
+    "members_other": "{{count}} members",
+    "issues_one": "{{count}} issue",
+    "issues_other": "{{count}} issues"
   },
   "runtimes": {
     "search_placeholder": "Search by name or owner",

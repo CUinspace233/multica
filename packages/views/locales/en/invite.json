@@ -9,7 +9,7 @@
     "go_to_dashboard": "Go to dashboard"
   },
   "accepted": {
-    "title": "You joined {workspace_name}!",
+    "title": "You joined {{workspace_name}}!",
     "redirecting": "Redirecting to workspace..."
   },
   "declined": {
@@ -18,7 +18,7 @@
     "go_to_dashboard": "Go to dashboard"
   },
   "main": {
-    "join_title": "Join {workspace_name}",
+    "join_title": "Join {{workspace_name}}",
     "fallback_workspace_name": "workspace",
     "invited_role_admin": "invited you to join as an admin.",
     "invited_role_member": "invited you to join as a member.",
@@ -43,12 +43,12 @@
     "subtitle": "Pick the workspaces you want to join. You can always handle the rest later from the sidebar.",
     "submit_skip": "Skip and set up my own workspace",
     "submit_join_one": "Join 1 workspace",
-    "submit_join_other": "Join {count} workspaces",
+    "submit_join_other": "Join {{count}} workspaces",
     "joining": "Joining...",
     "error_generic": "Failed to process invitations. Please try again.",
     "row_workspace_fallback": "Workspace",
     "row_inviter_fallback": "Someone",
-    "row_invited_admin": "{inviter} invited you as an admin",
-    "row_invited_member": "{inviter} invited you as a member"
+    "row_invited_admin": "{{inviter}} invited you as an admin",
+    "row_invited_member": "{{inviter}} invited you as a member"
   }
 }

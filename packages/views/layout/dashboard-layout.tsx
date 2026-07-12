@@ -32,7 +32,7 @@ export function DashboardLayout({
     // during a long-lived session. The guard now only gates the inner
     // content area; its fallback renders as an overlay inside SidebarInset
     // so the sidebar skeleton stays visible to the right user.
-    <SidebarProvider className="h-svh">
+    <SidebarProvider className="h-svh bg-app-shell">
       <WorkspacePresencePrefetch />
       <AppSidebar searchSlot={searchSlot} />
       <SidebarInset className="relative overflow-hidden">

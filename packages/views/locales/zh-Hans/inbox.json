@@ -15,9 +15,9 @@
     "archive_tooltip": "归档",
     "time": {
       "just_now": "刚刚",
-      "minutes": "{count} 分钟",
-      "hours": "{count} 小时",
-      "days": "{count} 天"
+      "minutes": "{{count}} 分钟",
+      "hours": "{{count}} 小时",
+      "days": "{{count}} 天"
     }
   },
   "detail": {
@@ -50,15 +50,15 @@
   "labels": {
     "set_status_to": "状态设为",
     "set_priority_to": "优先级设为",
-    "assigned_to": "分配给 {name}",
+    "assigned_to": "分配给 {{name}}",
     "removed_assignee": "移除了分配人",
-    "set_start_date_to": "开始日期设为 {date}",
+    "set_start_date_to": "开始日期设为 {{date}}",
     "removed_start_date": "移除了开始日期",
-    "set_due_date_to": "截止日期设为 {date}",
+    "set_due_date_to": "截止日期设为 {{date}}",
     "removed_due_date": "移除了截止日期",
-    "reacted_to_comment": "用 {emoji} 回应了你的评论",
-    "created_with_agent": "通过智能体创建：{identifier}",
-    "failed_with_detail": "失败：{detail}"
+    "reacted_to_comment": "用 {{emoji}} 回应了你的评论",
+    "created_with_agent": "通过智能体创建：{{identifier}}",
+    "failed_with_detail": "失败：{{detail}}"
   },
   "errors": {
     "mark_read_failed": "标为已读失败",

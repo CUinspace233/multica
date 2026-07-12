@@ -21,7 +21,7 @@
   },
   "archive_dialog": {
     "title": "Archive this squad?",
-    "description": "\"{name}\" will be archived. Issues currently assigned to this squad will be transferred to its leader. This can't be undone — create a new squad if you need the routing back.",
+    "description": "\"{{name}}\" will be archived. Issues currently assigned to this squad will be transferred to its leader. This can't be undone — create a new squad if you need the routing back.",
     "cancel": "Cancel",
     "confirm": "Archive",
     "archiving": "Archiving…",
@@ -52,8 +52,8 @@
   },
   "members_tab": {
     "section_title": "Members",
-    "section_count_one": "{count} member in this squad",
-    "section_count_other": "{count} members in this squad",
+    "section_count_one": "{{count}} member in this squad",
+    "section_count_other": "{{count}} members in this squad",
     "add_member_button": "Add Member",
     "create_agent_button": "Create Agent",
     "leader_chip": "Leader",
@@ -66,18 +66,18 @@
     "status_unstable": "Unstable",
     "status_archived": "Archived",
     "issue_status_blocked": "blocked",
-    "active_issue_more": "and {count} more",
-    "last_active_label": "last active {time}"
+    "active_issue_more": "and {{count}} more",
+    "last_active_label": "last active {{time}}"
   },
   "profile_card": {
     "unavailable": "Squad unavailable",
     "detail_link": "Detail →",
     "archived": "Archived",
-    "member_count_one": "{count} member",
-    "member_count_other": "{count} members",
+    "member_count_one": "{{count}} member",
+    "member_count_other": "{{count}} members",
     "members_section": "Members",
-    "more_members_one": "+{count} more",
-    "more_members_other": "+{count} more"
+    "more_members_one": "+{{count}} more",
+    "more_members_other": "+{{count}} more"
   },
   "instructions_tab": {
     "description": "Squad instructions are injected into the leader agent's prompt whenever it works on an issue assigned to this squad. Use them to give the leader squad-wide guidance, working agreements, or context the leader should follow on every task.",
@@ -96,8 +96,8 @@
     "section_columns": "Columns",
     "result_count_title": "Matching squads / all squads",
     "filter_label": "Filter",
-    "filter_active_count_one": "{count} filter",
-    "filter_active_count_other": "{count} filters",
+    "filter_active_count_one": "{{count}} filter",
+    "filter_active_count_other": "{{count}} filters",
     "clear_filters": "Clear filters"
   }
 }

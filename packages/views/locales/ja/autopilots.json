@@ -36,8 +36,8 @@
   "relative_date": {
     "today": "今日",
     "one_day_ago": "1 日前",
-    "days_ago": "{count} 日前",
-    "months_ago": "{count} か月前"
+    "days_ago": "{{count}} 日前",
+    "months_ago": "{{count}} か月前"
   },
   "templates": {
     "daily_news": {
@@ -95,7 +95,7 @@
     "toast_delete_failed": "オートパイロットを削除できませんでした",
     "delete_dialog": {
       "title": "オートパイロットを削除",
-      "description": "「{title}」を、そのトリガーと実行履歴ごと完全に削除します。この操作は元に戻せません。",
+      "description": "「{{title}}」を、そのトリガーと実行履歴ごと完全に削除します。この操作は元に戻せません。",
       "cancel": "キャンセル",
       "confirm": "削除",
       "deleting": "削除中..."
@@ -133,14 +133,14 @@
     "view_log": "実行ログを表示",
     "skipped_group": {
       "label": "スキップ済み",
-      "summary": "スキップされた実行 {count} 件"
+      "summary": "スキップされた実行 {{count}} 件"
     }
   },
   "webhook_payload": {
     "label": "Webhook イベント:",
     "unknown_event": "webhook.received",
     "payload": "Payload",
-    "content_type": "Content-Type: {type}",
+    "content_type": "Content-Type: {{type}}",
     "copy": "コピー",
     "copied": "Webhook payload をコピーしました",
     "copied_short": "コピーしました",
@@ -155,7 +155,7 @@
   "trigger_row": {
     "disabled_badge": "無効",
     "deprecated_badge": "非推奨",
-    "next_label": "次回: {date}",
+    "next_label": "次回: {{date}}",
     "webhook_url_label": "Webhook URL",
     "copy_url": "URL をコピー",
     "url_copied": "Webhook URL をコピーしました",
@@ -182,7 +182,7 @@
     "section_title": "Webhook の配信",
     "empty": "まだ Webhook の配信がありません。Webhook URL に POST を送ると、ここに表示されます。",
     "row": {
-      "attempts": "{count} 回の試行",
+      "attempts": "{{count}} 回の試行",
       "replay_badge": "再実行"
     },
     "status": {
@@ -258,11 +258,11 @@
     "saving": "保存中...",
     "toast_created": "オートパイロットを作成しました",
     "toast_create_partial": "オートパイロットは作成しましたが、スケジュールを保存できませんでした",
-    "toast_create_partial_with_reason": "オートパイロットは作成しましたが、スケジュールを保存できませんでした: {reason}",
+    "toast_create_partial_with_reason": "オートパイロットは作成しましたが、スケジュールを保存できませんでした: {{reason}}",
     "toast_create_failed": "オートパイロットを作成できませんでした",
     "toast_updated": "オートパイロットを更新しました",
     "toast_update_partial": "オートパイロットは更新しましたが、スケジュールを保存できませんでした",
-    "toast_update_partial_with_reason": "オートパイロットは更新しましたが、スケジュールを保存できませんでした: {reason}",
+    "toast_update_partial_with_reason": "オートパイロットは更新しましたが、スケジュールを保存できませんでした: {{reason}}",
     "toast_update_failed": "オートパイロットを更新できませんでした",
     "section_agent": "エージェント",
     "section_assignee": "担当者",
@@ -347,24 +347,24 @@
     "timezone_label": "タイムゾーン",
     "days_label": "曜日",
     "summary": {
-      "hourly": "毎時 · :{min}",
-      "daily": "毎日 {time}",
-      "weekdays": "平日 {time}",
-      "weekly": "{days} {time}",
+      "hourly": "毎時 · :{{min}}",
+      "daily": "毎日 {{time}}",
+      "weekdays": "平日 {{time}}",
+      "weekly": "{{days}} {{time}}",
       "custom": "カスタム cron",
       "no_days": "—"
     },
     "describe": {
-      "hourly": "毎時 :{min} に実行",
-      "daily": "毎日 {time} {offset} に実行",
-      "weekdays": "平日 {time} {offset} に実行",
-      "weekly": "毎週 {days} {time} {offset} に実行",
-      "custom": "カスタムスケジュール: {cron}"
+      "hourly": "毎時 :{{min}} に実行",
+      "daily": "毎日 {{time}} {{offset}} に実行",
+      "weekdays": "平日 {{time}} {{offset}} に実行",
+      "weekly": "毎週 {{days}} {{time}} {{offset}} に実行",
+      "custom": "カスタムスケジュール: {{cron}}"
     },
     "countdown": {
-      "days_hours": "{days} 日 {hours} 時間",
-      "hours_minutes": "{hours} 時間 {minutes} 分",
-      "minutes": "{minutes} 分",
+      "days_hours": "{{days}} 日 {{hours}} 時間",
+      "hours_minutes": "{{hours}} 時間 {{minutes}} 分",
+      "minutes": "{{minutes}} 分",
       "less_than_minute": "1 分未満"
     }
   },
@@ -381,7 +381,7 @@
   "toolbar": {
     "result_count_title": "該当する自動化 / すべての自動化",
     "filter_label": "フィルター",
-    "filter_active_count_other": "{count} 件のフィルター",
+    "filter_active_count_other": "{{count}} 件のフィルター",
     "clear_filters": "フィルターをクリア",
     "section_assignee": "担当",
     "section_mode": "モード",
@@ -398,11 +398,11 @@
     "pause": "一時停止",
     "resume": "再開",
     "delete": "削除",
-    "selected_other": "{count} 件選択中",
+    "selected_other": "{{count}} 件選択中",
     "clear_selection": "選択を解除",
     "delete_dialog": {
       "title": "自動化を削除しますか？",
-      "description_other": "{count} 件の自動化とその実行履歴を完全に削除します。",
+      "description_other": "{{count}} 件の自動化とその実行履歴を完全に削除します。",
       "warning": "この操作は取り消せません。",
       "cancel": "キャンセル",
       "confirm": "完全に削除",
