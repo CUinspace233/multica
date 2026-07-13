@@ -22,6 +22,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/analytics"
 	"github.com/multica-ai/multica/server/internal/auth"
 	"github.com/multica-ai/multica/server/internal/logger"
+	"github.com/multica-ai/multica/server/internal/middleware"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
 )
@@ -474,6 +475,29 @@ func (h *Handler) GetMe(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeError(w, http.StatusNotFound, "user not found")
 		return
+	}
+
+	// Defensive JWT refresh: if the JWT claims are stale relative to the DB
+	// (e.g., is_admin was promoted after login, or disabled_at was set),
+	// re-issue the token and update the auth cookie. Without this, a stale
+	// cookie locks the user out of /api/admin/* (or keeps a freshly-disabled
+	// user authenticated) until the 30-day TTL expires.
+	//
+	// Only fires for JWT-authenticated requests; PATs have no is_admin/disabled
+	// claims by design and ClaimsFromContext returns nil for them.
+	if claims := middleware.ClaimsFromContext(r.Context()); claims != nil {
+		claimIsAdmin, _ := claims["is_admin"].(bool)
+		claimDisabled, _ := claims["disabled"].(bool)
+		if claimIsAdmin != user.IsAdmin || claimDisabled != user.DisabledAt.Valid {
+			tokenString, err := h.issueJWT(user)
+			if err != nil {
+				slog.WarnContext(r.Context(), "failed to refresh JWT in /api/me",
+					"error", err, "user_id", userID)
+			} else if err := auth.SetAuthCookies(w, tokenString); err != nil {
+				slog.WarnContext(r.Context(), "failed to refresh auth cookies in /api/me",
+					"error", err, "user_id", userID)
+			}
+		}
 	}
 
 	writeJSON(w, http.StatusOK, userToResponse(user))
