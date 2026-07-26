@@ -681,7 +681,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
                         render={<AppLink href={href} />}
                         className="text-muted-foreground hover:not-data-active:bg-sidebar-accent/70 data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground"
                       >
-                        <Icon />
+                        {Icon && <Icon />}
                         <span>{t(($) => $.nav[item.labelKey])}</span>
                         {item.key === "inbox" && unreadCount > 0 && (
                           <CappedNumberFlow
@@ -755,7 +755,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
                         render={<AppLink href={href} />}
                         className="text-muted-foreground hover:not-data-active:bg-sidebar-accent/70 data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground"
                       >
-                        <Icon />
+                        {Icon && <Icon />}
                         <span>{t(($) => $.nav[item.labelKey])}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -780,7 +780,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
                         render={<AppLink href={href} />}
                         className="text-muted-foreground hover:not-data-active:bg-sidebar-accent/70 data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground"
                       >
-                        <Icon />
+                        {Icon && <Icon />}
                         <span>{t(($) => $.nav[item.labelKey])}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
