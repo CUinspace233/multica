@@ -206,18 +206,27 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 	// across the upgrade. A nil ctx is impossible here — we use context.
 	startCtx := context.Background()
 	allowlistH := &handler.AdminAllowlistHandler{Queries: queries}
-	allowlistCounts, _ := queries.CountAllowlistByKind(startCtx)
-	if len(allowlistCounts) == 0 {
-		if err := allowlistH.SeedFromEnv(startCtx,
-			splitAndTrim(os.Getenv("ALLOWED_EMAILS")),
-			splitAndTrim(os.Getenv("ALLOWED_EMAIL_DOMAINS")),
-		); err != nil {
-			slog.Warn("allowlist seed failed; falling back to env-only signup gate", "err", err)
-			_ = allowlistH.Load(startCtx)
-		}
-	} else {
-		if err := allowlistH.Load(startCtx); err != nil {
-			slog.Warn("allowlist load failed; falling back to env-only signup gate", "err", err)
+	// Skip the warm-up when no DB pool is wired (TestMain passes nil to
+	// assert router-level behavior without the integration fixture).
+	// Without this guard, queries.CountAllowlistByKind panics on the
+	// nil db and the test fails before its assertions run. Production
+	// callers (cmd/server/main.go) always pass a real pool, so the
+	// skip is invisible there — the signup gate still uses env vars
+	// when the table is empty/unreachable, matching pre-fork behavior.
+	if pool != nil {
+		allowlistCounts, _ := queries.CountAllowlistByKind(startCtx)
+		if len(allowlistCounts) == 0 {
+			if err := allowlistH.SeedFromEnv(startCtx,
+				splitAndTrim(os.Getenv("ALLOWED_EMAILS")),
+				splitAndTrim(os.Getenv("ALLOWED_EMAIL_DOMAINS")),
+			); err != nil {
+				slog.Warn("allowlist seed failed; falling back to env-only signup gate", "err", err)
+				_ = allowlistH.Load(startCtx)
+			}
+		} else {
+			if err := allowlistH.Load(startCtx); err != nil {
+				slog.Warn("allowlist load failed; falling back to env-only signup gate", "err", err)
+			}
 		}
 	}
 
