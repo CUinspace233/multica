@@ -13,10 +13,17 @@
 --   - ALTER TABLE ... ADD COLUMN ... NOT NULL DEFAULT false is safe because
 --     the default applies to existing rows on the fly
 --   - Partial indexes (WHERE ...) keep the indexes small
+--
+-- Renumbered from 164 to 225 in the 2026-07-26 upstream sync: 164_attachment_task_id
+-- already existed upstream, so this fork-owned migration had to move. The new
+-- prefix changes the schema_migrations key, so the runner will re-apply this on
+-- databases that already applied it as 164; ADD COLUMN IF NOT EXISTS makes that
+-- idempotent (mirrors upstream's 164_attachment_task_id IF NOT EXISTS pattern
+-- used for the same self-heal reason — see comment in that file).
 
 ALTER TABLE "user"
-    ADD COLUMN is_admin BOOLEAN NOT NULL DEFAULT false,
-    ADD COLUMN disabled_at TIMESTAMPTZ;
+    ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN IF NOT EXISTS disabled_at TIMESTAMPTZ;
 
 -- Lookups of admin accounts and disabled accounts are rare but need to be
 -- fast (the JWT middleware reads is_admin on every authenticated request,

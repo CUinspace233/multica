@@ -1,4 +1,4 @@
--- Reverse 164_user_is_admin_and_disabled
+-- Reverse 225_user_is_admin_and_disabled (renumbered from 164 during 2026-07-26 upstream sync)
 
 DROP INDEX IF EXISTS user_disabled_at_idx;
 DROP INDEX IF EXISTS user_is_admin_idx;
