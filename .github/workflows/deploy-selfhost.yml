@@ -1,0 +1,43 @@
+# GitHub Actions: redeploy the self-host stack on main merge.
+#
+# Scope: this workflow does NOT build images and does NOT touch /opt/multica
+# on the host. It assumes a `:dev` image is already built (e.g. via
+# `bin/deploy.sh` on the host or a separate build pipeline) and that
+# `MULTICA_IMAGE_TAG` / `MULTICA_BACKEND_IMAGE` / `MULTICA_WEB_IMAGE` in
+# `/opt/multica/.env` already point at it. The workflow's job is purely to
+# call the host-side `multica-reload.sh` wrapper, which runs
+# `systemctl reload multica-stack` and probes `/readyz`.
+#
+# Required GitHub Secrets (Settings → Secrets and variables → Actions):
+#   SSH_HOST      e.g. multica.cuinspace.com or a public IP
+#   SSH_PORT      22 by default
+#   SSH_USER      deploy   (the restricted user created on the host)
+#   SSH_KEY       the private ed25519 key whose public half lives in
+#                 /home/deploy/.ssh/authorized_keys
+name: Deploy selfhost
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: selfhost-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Reload multica-stack
+    runs-on: ubuntu-latest
+    environment: selfhost
+
+    steps:
+      - name: Run host-side reload wrapper
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 10m
+          script: sudo /usr/local/bin/multica-reload.sh
