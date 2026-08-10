@@ -5,8 +5,8 @@
 # `bin/deploy.sh` on the host or a separate build pipeline) and that
 # `MULTICA_IMAGE_TAG` / `MULTICA_BACKEND_IMAGE` / `MULTICA_WEB_IMAGE` in
 # `/opt/multica/.env` already point at it. The workflow's job is purely to
-# call `systemctl reload multica-stack` (recreate backend + frontend with the
-# new env) and then probe `/readyz`.
+# call the host-side `multica-reload.sh` wrapper, which runs
+# `systemctl reload multica-stack` and probes `/readyz`.
 #
 # Required GitHub Secrets (Settings → Secrets and variables → Actions):
 #   SSH_HOST      e.g. multica.cuinspace.com or a public IP
@@ -32,47 +32,12 @@ jobs:
     environment: selfhost
 
     steps:
-      - name: Trigger systemd reload + readiness probe
-        uses: appleboy/ssh-action@v1.2.2
+      - name: Run host-side reload wrapper
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 10m
-          # drone-ssh 1.8.1 defaults to RequestPty: true. With a PTY, sudo
-          # still demands an askpass helper unless `!requiretty` is honored
-          # for the user, which it is here — but the action's wrapper adds
-          # extra overhead and the /readyz probe output is harder to read.
-          # Force a non-interactive channel to match what `sudo -n` expects
-          # on the host and to keep stdout captured.
-          # IMPORTANT: keep these as YAML booleans (no quotes). The action
-          # parses them as JS booleans; a quoted "false" is the truthy
-          # string "false" and ends up enabling the option.
-          request_pty: false
-          capture_stdout: true
-          script: |
-            set -euo pipefail
-
-            # `systemctl reload multica-stack` re-runs the unit's ExecReload,
-            # which is `docker compose up -d --force-recreate --no-deps
-            # backend frontend`. PostgreSQL and Redis stay warm; only the
-            # application containers are recreated with the new env.
-            sudo /usr/bin/systemctl reload multica-stack
-
-            # Confirm systemd sees the stack as active before /readyz.
-            sudo /usr/bin/systemctl is-active --quiet multica-stack
-
-            # Fail the workflow if the API never reports ok. 10s is generous
-            # for a single-host container recreate; bump if your build /
-            # migration step legitimately takes longer.
-            for i in $(seq 1 30); do
-              if /usr/bin/curl --fail --silent --show-error --max-time 5 \
-                   https://api.cuinspace.com/readyz; then
-                echo "readyz ok on attempt $i"
-                exit 0
-              fi
-              sleep 2
-            done
-            echo "readyz never returned ok after 60s" >&2
-            exit 1
+          script: sudo /usr/local/bin/multica-reload.sh
