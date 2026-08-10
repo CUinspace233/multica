@@ -40,6 +40,14 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 10m
+          # drone-ssh 1.8.1 defaults to RequestPty: true. With a PTY, sudo
+          # still demands an askpass helper unless `!requiretty` is honored
+          # for the user, which it is here — but the action's wrapper adds
+          # extra overhead and the /readyz probe output is harder to read.
+          # Force a non-interactive channel to match what `sudo -n` expects
+          # on the host and to keep stdout captured.
+          request_pty: "false"
+          capture_stdout: "true"
           script: |
             set -euo pipefail
 
