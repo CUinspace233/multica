@@ -149,7 +149,7 @@ export function UsersTab() {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4 text-muted-foreground" />
-        <h2 className="text-sm font-semibold">
+        <h2 className="text-body font-semibold">
           {t(($) => $.tabs.users)}
           {usersQuery.data && (
             <span className="ml-2 text-muted-foreground font-normal">
@@ -317,20 +317,20 @@ function UserRow({
         {user.avatar_url && (
           <AvatarImage src={user.avatar_url} alt={user.name} />
         )}
-        <AvatarFallback className="text-xs">
+        <AvatarFallback className="text-caption">
           {user.name.slice(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium truncate flex items-center gap-2">
+        <div className="text-body font-medium truncate flex items-center gap-2">
           {user.name}
           {isSelf && (
-            <span className="text-[10px] font-normal text-muted-foreground uppercase tracking-wide">
+            <span className="text-micro font-normal text-muted-foreground uppercase tracking-wide">
               {labels.youBadge}
             </span>
           )}
         </div>
-        <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+        <div className="text-caption text-muted-foreground truncate">{user.email}</div>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger

@@ -51,7 +51,7 @@ export function WorkspacesTab() {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <FolderKanban className="h-4 w-4 text-muted-foreground" />
-        <h2 className="text-sm font-semibold">
+        <h2 className="text-body font-semibold">
           {t(($) => $.tabs.workspaces)}
           {query.data && (
             <span className="ml-2 text-muted-foreground font-normal">
@@ -134,26 +134,26 @@ function WorkspaceRow({
   const description = w.description?.trim();
   return (
     <div className={`flex items-center gap-3 px-4 py-3 ${divider ? "border-t border-border/50" : ""}`}>
-      <div className="h-8 w-8 rounded-md bg-muted flex items-center justify-center text-sm font-semibold text-muted-foreground shrink-0">
+      <div className="h-8 w-8 rounded-md bg-muted flex items-center justify-center text-body font-semibold text-muted-foreground shrink-0">
         {w.name.charAt(0).toUpperCase()}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium truncate">{w.name}</div>
+        <div className="text-body font-medium truncate">{w.name}</div>
         {description ? (
-          <div className="text-xs text-muted-foreground truncate">
+          <div className="text-caption text-muted-foreground truncate">
             {description}
           </div>
         ) : (
-          <div className="text-xs text-muted-foreground truncate font-mono">
+          <div className="text-caption text-muted-foreground truncate font-mono">
             {w.slug}
           </div>
         )}
       </div>
-      <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+      <div className="flex items-center gap-1 text-caption text-muted-foreground shrink-0">
         <Users className="h-3 w-3" />
         <span>{membersLabel(w.member_count)}</span>
       </div>
-      <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0 min-w-20 justify-end">
+      <div className="flex items-center gap-1 text-caption text-muted-foreground shrink-0 min-w-20 justify-end">
         <Hash className="h-3 w-3" />
         <span>
           {w.issue_prefix}-{w.issue_counter}

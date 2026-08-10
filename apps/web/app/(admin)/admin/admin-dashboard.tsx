@@ -45,12 +45,12 @@ export function AdminDashboard() {
           superuser role, so we don't need a "My Account" group like the
           user-facing settings page does. */}
       <div className="shrink-0 md:w-52 border-b md:border-b-0 md:border-r md:overflow-y-auto p-3 md:p-4">
-        <h1 className="hidden md:block text-sm font-semibold mb-1 px-2">{t(($) => $.page_title)}</h1>
-        <p className="hidden md:block text-xs text-muted-foreground mb-4 px-2">
+        <h1 className="hidden md:block text-body font-semibold mb-1 px-2">{t(($) => $.page_title)}</h1>
+        <p className="hidden md:block text-caption text-muted-foreground mb-4 px-2">
           {t(($) => $.page_subtitle)}
         </p>
         <TabsList variant="line" className="flex-col items-stretch w-full">
-          <span className="px-2 pb-1 pt-2 text-xs font-medium text-muted-foreground truncate">
+          <span className="px-2 pb-1 pt-2 text-caption font-medium text-muted-foreground truncate">
             {t(($) => $.groups.identity)}
           </span>
           <TabsTrigger value="users">
@@ -65,7 +65,7 @@ export function AdminDashboard() {
             <Monitor className="h-4 w-4" />
             {t(($) => $.tabs.runtimes)}
           </TabsTrigger>
-          <span className="px-2 pb-1 pt-4 text-xs font-medium text-muted-foreground truncate">
+          <span className="px-2 pb-1 pt-4 text-caption font-medium text-muted-foreground truncate">
             {t(($) => $.groups.access)}
           </span>
           <TabsTrigger value="access">

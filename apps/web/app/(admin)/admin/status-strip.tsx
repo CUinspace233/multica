@@ -45,19 +45,19 @@ export async function StatusStrip() {
   const instance = stats?.instance_name || "instance";
 
   return (
-    <div className="border-b h-auto md:h-9 shrink-0 flex flex-wrap items-center gap-x-3 gap-y-1 md:flex-nowrap md:gap-6 px-4 text-xs text-muted-foreground">
+    <div className="border-b h-auto md:h-9 shrink-0 flex flex-wrap items-center gap-x-3 gap-y-1 md:flex-nowrap md:gap-6 px-4 text-caption text-muted-foreground">
       <span className="font-mono">
-        <span className="text-muted-foreground/70">instance</span>{" "}
+        <span className="text-muted-foreground">instance</span>{" "}
         <span className="text-foreground">{instance}</span>
       </span>
       <span className="font-mono">
-        <span className="text-muted-foreground/70">uptime</span>{" "}
+        <span className="text-muted-foreground">uptime</span>{" "}
         <span className="text-foreground">
           {stats ? formatUptime(stats.uptime_seconds) : "—"}
         </span>
       </span>
       <span className="font-mono">
-        <span className="text-muted-foreground/70">signup</span>{" "}
+        <span className="text-muted-foreground">signup</span>{" "}
         <span
           className={
             stats?.signup_open ? "text-success" : "text-muted-foreground"
@@ -67,7 +67,7 @@ export async function StatusStrip() {
         </span>
       </span>
       <span className="font-mono">
-        <span className="text-muted-foreground/70">allowlist</span>{" "}
+        <span className="text-muted-foreground">allowlist</span>{" "}
         <span className="text-foreground">
           {stats
             ? `${stats.allowlist_emails_count} emails · ${stats.allowlist_domains_count} domains`
@@ -75,7 +75,7 @@ export async function StatusStrip() {
         </span>
       </span>
       <span className="font-mono">
-        <span className="text-muted-foreground/70">runtimes</span>{" "}
+        <span className="text-muted-foreground">runtimes</span>{" "}
         <span className="text-foreground">
           {stats
             ? `${stats.runtimes_online} online / ${stats.runtimes_total} total`
@@ -83,7 +83,7 @@ export async function StatusStrip() {
         </span>
       </span>
       <span className="ml-auto font-mono">
-        <span className="text-muted-foreground/70">last admin action</span>{" "}
+        <span className="text-muted-foreground">last admin action</span>{" "}
         <span className="text-muted-foreground">never</span>
       </span>
     </div>

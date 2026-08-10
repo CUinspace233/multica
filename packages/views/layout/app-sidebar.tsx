@@ -63,7 +63,12 @@ import {
   issueViewContainerKey,
   useActiveIssueViewStore,
 } from "@multica/core/issue-views/active-view-store";
-import { useCurrentWorkspace, useWorkspacePaths, paths } from "@multica/core/paths";
+import {
+  useCurrentWorkspace,
+  useWorkspacePaths,
+  useWorkspaceSlug,
+  paths,
+} from "@multica/core/paths";
 import { workspaceListOptions, myInvitationListOptions, workspaceKeys } from "@multica/core/workspace/queries";
 import { resolvePublicFileUrl } from "@multica/core/workspace/avatar-url";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

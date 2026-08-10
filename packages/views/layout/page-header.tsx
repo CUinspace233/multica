@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@multica/ui/lib/utils";
-import { SidebarTrigger } from "@multica/ui/components/ui/sidebar";
+import { SidebarTrigger, useSidebarSafe } from "@multica/ui/components/ui/sidebar";
 
 /**
  * The way back to the nav wherever it is not a permanent column: a sheet below

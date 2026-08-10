@@ -60,7 +60,7 @@ export function RuntimesTab() {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <Monitor className="h-4 w-4 text-muted-foreground" />
-        <h2 className="text-sm font-semibold">
+        <h2 className="text-body font-semibold">
           {t(($) => $.tabs.runtimes)}
           {query.data && (
             <span className="ml-2 text-muted-foreground font-normal">
@@ -151,25 +151,25 @@ function RuntimeRow({
         <Cpu className="h-4 w-4 text-muted-foreground" />
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium truncate">{r.name}</div>
-        <div className="text-xs text-muted-foreground truncate">
+        <div className="text-body font-medium truncate">{r.name}</div>
+        <div className="text-caption text-muted-foreground truncate">
           {r.owner_email || "—"}
         </div>
       </div>
-      <Badge variant="outline" className="shrink-0 font-mono text-[10px]">
+      <Badge variant="outline" className="shrink-0 font-mono text-micro">
         {r.provider}
       </Badge>
-      <div className="flex items-center gap-1.5 text-xs shrink-0 min-w-24">
+      <div className="flex items-center gap-1.5 text-caption shrink-0 min-w-24">
         {isOnline ? (
           <CircleDot className="h-3 w-3 text-success" />
         ) : (
-          <CircleDashed className="h-3 w-3 text-muted-foreground/60" />
+          <CircleDashed className="h-3 w-3 text-muted-foreground" />
         )}
         <span className={isOnline ? "text-success" : "text-muted-foreground"}>
           {isOnline ? onlineLabel : offlineLabel}
         </span>
       </div>
-      <div className="text-xs text-muted-foreground shrink-0 min-w-32 text-right">
+      <div className="text-caption text-muted-foreground shrink-0 min-w-32 text-right">
         {r.last_seen_at
           ? new Date(r.last_seen_at).toLocaleString()
           : neverLabel}

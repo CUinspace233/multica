@@ -20,13 +20,13 @@ export function AdminMobileHeader() {
       {isMobile && (
         <Link
           href="/"
-          className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-caption text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           {t(($) => $.back_to_workspaces)}
         </Link>
       )}
-      <h1 className="text-sm font-medium">{t(($) => $.page_title)}</h1>
+      <h1 className="text-body font-medium">{t(($) => $.page_title)}</h1>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   User,
   SlidersHorizontal,
   Key,
+  Settings,
   Users,
   FolderGit2,
   FlaskConical,
