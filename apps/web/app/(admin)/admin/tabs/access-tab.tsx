@@ -124,7 +124,7 @@ export function AccessTab() {
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-        <h2 className="text-sm font-semibold">{t(($) => $.tabs.access)}</h2>
+        <h2 className="text-body font-semibold">{t(($) => $.tabs.access)}</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -275,7 +275,7 @@ function AllowlistColumn({
               aria-invalid={!!draftError}
             />
             {draftError && (
-              <p className="text-xs text-destructive mt-1">{draftError}</p>
+              <p className="text-caption text-destructive mt-1">{draftError}</p>
             )}
           </div>
           <Button onClick={tryAdd} disabled={addPending || !draft.trim()}>
@@ -295,7 +295,7 @@ function AllowlistColumn({
               <EmptyMedia variant="icon">
                 <Icon />
               </EmptyMedia>
-              <EmptyTitle className="text-sm">{labels.empty}</EmptyTitle>
+              <EmptyTitle className="text-body">{labels.empty}</EmptyTitle>
             </EmptyHeader>
           </Empty>
         ) : (
@@ -304,7 +304,7 @@ function AllowlistColumn({
               <Badge
                 key={`${e.kind}:${e.value}`}
                 variant="secondary"
-                className="font-mono text-xs gap-1 pr-1"
+                className="font-mono text-caption gap-1 pr-1"
               >
                 {kind === "domain" ? "@" : ""}
                 {e.value}
