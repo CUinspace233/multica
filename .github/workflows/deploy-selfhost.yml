@@ -46,8 +46,11 @@ jobs:
           # extra overhead and the /readyz probe output is harder to read.
           # Force a non-interactive channel to match what `sudo -n` expects
           # on the host and to keep stdout captured.
-          request_pty: "false"
-          capture_stdout: "true"
+          # IMPORTANT: keep these as YAML booleans (no quotes). The action
+          # parses them as JS booleans; a quoted "false" is the truthy
+          # string "false" and ends up enabling the option.
+          request_pty: false
+          capture_stdout: true
           script: |
             set -euo pipefail
 
