@@ -51,16 +51,18 @@ chown deploy:deploy /home/deploy/.ssh/authorized_keys
 
 ```bash
 cat > /etc/sudoers.d/deploy <<'EOF'
+Defaults:deploy !requiretty
 Cmnd_Alias MULTICA_RELOAD = \
   /usr/bin/systemctl reload  multica-stack, \
   /usr/bin/systemctl status  multica-stack, \
   /usr/bin/systemctl is-active multica-stack
 deploy ALL=(root) NOPASSWD: MULTICA_RELOAD
-Defaults!MULTICA_RELOAD !requiretty
 EOF
 chmod 440 /etc/sudoers.d/deploy
 visudo -c -f /etc/sudoers.d/deploy
 ```
+
+> `!requiretty` 必须挂在**用户**上（`Defaults:deploy !requiretty`），不能挂在 `Cmnd_Alias` negation 上。`appleboy/ssh-action` 走 `request_pty=false` 的非交互式通道，只有用户级豁免才能让 sudo 接受。
 
 `deploy` 用户**只能**：
 
