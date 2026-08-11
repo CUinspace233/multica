@@ -32,7 +32,7 @@ jobs:
     environment: selfhost
 
     steps:
-      - name: Run host-side reload wrapper
+      - name: Build :dev images, switch .env, reload multica-stack
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -40,4 +40,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 10m
-          script: sudo /usr/local/bin/multica-reload.sh
+          script: sudo /usr/local/bin/multica-build-and-reload.sh
