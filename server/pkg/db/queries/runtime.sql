@@ -541,3 +541,24 @@ SELECT count(*) FROM (
     )
   LIMIT @max_rows::int
 ) AS blocked_runtimes;
+
+-- =============================================================================
+-- Enterprise fork (CUinspace233/multica): global admin queries.
+-- =============================================================================
+
+-- name: ListAllRuntimesAdmin :many
+-- Lists every daemon-registered runtime across all workspaces for the
+-- admin dashboard. Includes the owning user email (LEFT JOIN since a
+-- runtime can outlive its owner's deleted account via ON DELETE SET
+-- NULL on agent_runtime.owner_id). Pagination in the handler.
+SELECT
+    r.id, r.workspace_id, r.owner_id, r.daemon_id, r.name,
+    r.provider, r.status, r.last_seen_at, r.created_at, r.updated_at,
+    u.email AS owner_email
+FROM agent_runtime r
+LEFT JOIN "user" u ON u.id = r.owner_id
+ORDER BY r.created_at DESC
+LIMIT $1 OFFSET $2;
+
+-- name: CountAllRuntimes :one
+SELECT count(*)::bigint FROM agent_runtime;
