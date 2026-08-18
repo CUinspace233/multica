@@ -632,7 +632,7 @@ func (h *Handler) SetChatSessionArchived(w http.ResponseWriter, r *http.Request)
 	// clients drop the row instead of showing it queued until the next
 	// refresh, and wakes the runtime so a queued successor is claimed now
 	// rather than at the daemon's next poll.
-	h.TaskService.BroadcastCancelledTasks(r.Context(), cancelled)
+	h.TaskService.BroadcastCancelledTasks(r.Context(), workspaceID, cancelled)
 
 	resolvedSessionID := uuidToString(updated.ID)
 	status := updated.Status
@@ -756,7 +756,11 @@ func (h *Handler) DeleteChatSession(w http.ResponseWriter, r *http.Request) {
 
 	// Post-commit broadcasts. Subscribers should never observe events for a
 	// tx that didn't actually persist.
-	h.TaskService.BroadcastCancelledTasks(r.Context(), cancelled)
+	//
+	// The workspace has to come from the session we just deleted: the tasks were
+	// cancelled and returned before the delete, so they still carry its id, but
+	// the row they would be resolved through is gone by now.
+	h.TaskService.BroadcastCancelledTasks(r.Context(), workspaceID, cancelled)
 
 	resolvedSessionID := uuidToString(session.ID)
 	h.publishChat(protocol.EventChatSessionDeleted, workspaceID, "member", userID, resolvedSessionID, protocol.ChatSessionDeletedPayload{
@@ -857,8 +861,11 @@ func (h *Handler) SendChatMessage(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusConflict, "chat agent is archived")
 		return
 	}
-	if !agent.RuntimeID.Valid {
-		h.writeDispatchBlocked(w, http.StatusConflict, ReasonAgentRuntimeRequired)
+	// Shared verdict: an unbound agent and a machine whose CLI cannot run are
+	// both refusals here, with their own codes. A merely offline runtime is not
+	// checked at all — chat messages queue for it, as they always have.
+	if verdict, err := service.AgentReadiness(r.Context(), h.Queries, agent); err == nil && verdict.Blocked() {
+		h.writeDispatchBlocked(w, http.StatusConflict, verdict.Reason)
 		return
 	}
 
@@ -1816,6 +1823,7 @@ func (h *Handler) CancelTaskByUser(w http.ResponseWriter, r *http.Request) {
 		QueuedOnly:                 queuedOnly,
 		ExpectedChatSession:        expectedSession,
 		QueueAction:                queueAction,
+		UserInitiated:              true,
 	})
 	if errors.Is(err, service.ErrTaskNoLongerQueued) {
 		writeError(w, http.StatusConflict, err.Error())

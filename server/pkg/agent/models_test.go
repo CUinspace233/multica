@@ -36,7 +36,7 @@ func TestStaticModelCatalogsHaveValidEntries(t *testing.T) {
 
 func TestListModelsQwenUsesRuntimeDefaultAndManualEntry(t *testing.T) {
 	// Qwen returns its manual-entry catalog without resolving or executing a CLI.
-	got, err := ListModels(context.Background(), "qwen", "")
+	got, err := ListModels(context.Background(), "qwen", Command{Path: ""})
 	if err != nil {
 		t.Fatalf("ListModels(qwen) error: %v", err)
 	}
@@ -59,7 +59,7 @@ func TestListModelsCopilotFallsBackToStatic(t *testing.T) {
 	delete(modelCache, "copilot")
 	modelCacheMu.Unlock()
 
-	got, err := ListModels(ctx, "copilot", missingAgentExecutable(t, "copilot"))
+	got, err := ListModels(ctx, "copilot", Command{Path: missingAgentExecutable(t, "copilot")})
 	if err != nil {
 		t.Fatalf("ListModels(copilot) error: %v", err)
 	}
@@ -178,7 +178,7 @@ done
 	fake := filepath.Join(t.TempDir(), "kimi")
 	writeTestExecutable(t, fake, []byte(script))
 
-	models, err := discoverKimiModels(context.Background(), fake)
+	models, err := discoverKimiModels(context.Background(), Command{Path: fake})
 	if err != nil {
 		t.Fatalf("discoverKimiModels: %v", err)
 	}
@@ -197,18 +197,18 @@ done
 		}
 	}
 
-	valid, err := ValidateThinkingLevel(context.Background(), "kimi", fake, "kimi-code/k3", "high")
+	valid, err := ValidateThinkingLevel(context.Background(), "kimi", Command{Path: fake}, "kimi-code/k3", "high")
 	if err != nil || !valid {
 		t.Errorf("ValidateThinkingLevel(k3, high) = (%v, %v), want (true, nil)", valid, err)
 	}
 	// Unsupported persisted values are ordinary catalog results, not discovery
 	// errors. The daemon logs a warning, ignores the value, and starts the task
 	// with the runtime's own setting, just as it does for other providers.
-	valid, err = ValidateThinkingLevel(context.Background(), "kimi", fake, "kimi-code/k3", "medium")
+	valid, err = ValidateThinkingLevel(context.Background(), "kimi", Command{Path: fake}, "kimi-code/k3", "medium")
 	if err != nil || valid {
 		t.Errorf("ValidateThinkingLevel(k3, medium) = (%v, %v), want unsupported without an error", valid, err)
 	}
-	valid, err = ValidateThinkingLevel(context.Background(), "kimi", fake, "kimi-code/kimi-for-coding", "high")
+	valid, err = ValidateThinkingLevel(context.Background(), "kimi", Command{Path: fake}, "kimi-code/kimi-for-coding", "high")
 	if err != nil || valid {
 		t.Errorf("ValidateThinkingLevel(kimi-for-coding, high) = (%v, %v), want unsupported without an error", valid, err)
 	}
@@ -239,7 +239,7 @@ done
 	fake := filepath.Join(t.TempDir(), "kimi")
 	writeTestExecutable(t, fake, []byte(script))
 
-	models, err := discoverKimiModels(context.Background(), fake)
+	models, err := discoverKimiModels(context.Background(), Command{Path: fake})
 	if err != nil {
 		t.Fatalf("discoverKimiModels: %v", err)
 	}
@@ -280,7 +280,7 @@ done
 	fake := filepath.Join(t.TempDir(), "kimi")
 	writeTestExecutable(t, fake, []byte(script))
 
-	models, err := discoverKimiModels(context.Background(), fake)
+	models, err := discoverKimiModels(context.Background(), Command{Path: fake})
 	if err != nil {
 		t.Fatalf("discoverKimiModels: %v", err)
 	}
@@ -324,7 +324,7 @@ done
 	fake := filepath.Join(t.TempDir(), "kimi")
 	writeTestExecutable(t, fake, []byte(script))
 
-	models, err := discoverKimiModels(context.Background(), fake)
+	models, err := discoverKimiModels(context.Background(), Command{Path: fake})
 	if err != nil {
 		t.Fatalf("discoverKimiModels: %v", err)
 	}
@@ -388,7 +388,7 @@ done
 			fake := filepath.Join(t.TempDir(), "kimi")
 			writeTestExecutable(t, fake, []byte(strings.Replace(script, "VERSION", tt.version, 1)))
 
-			models, err := discoverKimiModels(context.Background(), fake)
+			models, err := discoverKimiModels(context.Background(), Command{Path: fake})
 			if err != nil {
 				t.Fatalf("discoverKimiModels: %v", err)
 			}
@@ -599,6 +599,18 @@ func TestCodexStaticModelsMatchVerifiedFallbackCatalog(t *testing.T) {
 	if got := ids["gpt-5.3-codex"].Thinking; got == nil || !hasThinkingLevel(got, "xhigh") || hasThinkingLevel(got, "max") || hasThinkingLevel(got, "ultra") {
 		t.Errorf("unexpected gpt-5.3-codex thinking catalog: %+v", got)
 	}
+	for id, label := range map[string]string{
+		"gpt-5.6-sol":   "GPT-5.6 Sol",
+		"gpt-5.6-terra": "GPT-5.6 Terra",
+		"gpt-5.6-luna":  "GPT-5.6 Luna",
+	} {
+		if got := ids[id].Label; got != label {
+			t.Errorf("Codex model %q label = %q, want %q", id, got, label)
+		}
+		if ModelKnownIncompatibleWithProvider("codex", id) {
+			t.Errorf("Codex model %q must be accepted by the provider compatibility gate", id)
+		}
+	}
 }
 
 func TestModelKnownIncompatibleWithProvider(t *testing.T) {
@@ -631,6 +643,30 @@ func TestModelKnownIncompatibleWithProvider(t *testing.T) {
 			provider: "claude",
 			model:    "claude-opus-4-7",
 			want:     false,
+		},
+		{
+			name:     "claude context variant is compatible with claude",
+			provider: "claude",
+			model:    "claude-opus-5[1m]",
+			want:     false,
+		},
+		{
+			name:     "future-shaped claude context variant is compatible with claude",
+			provider: "claude",
+			model:    "claude-opus-5[500k]",
+			want:     false,
+		},
+		{
+			name:     "malformed claude context variant is incompatible with claude",
+			provider: "claude",
+			model:    "claude-opus-5[weird]",
+			want:     true,
+		},
+		{
+			name:     "unknown claude base stays incompatible after context normalization",
+			provider: "claude",
+			model:    "claude-fake-9[1m]",
+			want:     true,
 		},
 		{
 			name:     "provider-prefixed openai model is incompatible with codex",
@@ -759,7 +795,7 @@ func TestListModelsHermesWithoutBinary(t *testing.T) {
 	delete(modelCache, "hermes")
 	modelCacheMu.Unlock()
 
-	got, err := ListModels(ctx, "hermes", missingAgentExecutable(t, "hermes"))
+	got, err := ListModels(ctx, "hermes", Command{Path: missingAgentExecutable(t, "hermes")})
 	if err != nil {
 		t.Fatalf("ListModels(hermes) error: %v", err)
 	}
@@ -774,7 +810,7 @@ func TestListModelsKiroWithoutBinary(t *testing.T) {
 	delete(modelCache, "kiro")
 	modelCacheMu.Unlock()
 
-	got, err := ListModels(ctx, "kiro", missingAgentExecutable(t, "kiro-cli"))
+	got, err := ListModels(ctx, "kiro", Command{Path: missingAgentExecutable(t, "kiro-cli")})
 	if err != nil {
 		t.Fatalf("ListModels(kiro) error: %v", err)
 	}
@@ -789,7 +825,7 @@ func TestListModelsQoderWithoutBinary(t *testing.T) {
 	delete(modelCache, "qoder")
 	modelCacheMu.Unlock()
 
-	got, err := ListModels(ctx, "qoder", missingAgentExecutable(t, "qodercli"))
+	got, err := ListModels(ctx, "qoder", Command{Path: missingAgentExecutable(t, "qodercli")})
 	if err != nil {
 		t.Fatalf("ListModels(qoder) error: %v", err)
 	}
@@ -804,7 +840,7 @@ func TestListModelsQoderCNWithoutBinary(t *testing.T) {
 	delete(modelCache, "qoderclicn")
 	modelCacheMu.Unlock()
 
-	got, err := ListModels(ctx, "qoderclicn", missingAgentExecutable(t, "qoderclicn"))
+	got, err := ListModels(ctx, "qoderclicn", Command{Path: missingAgentExecutable(t, "qoderclicn")})
 	if err != nil {
 		t.Fatalf("ListModels(qoderclicn) error: %v", err)
 	}
@@ -815,7 +851,7 @@ func TestListModelsQoderCNWithoutBinary(t *testing.T) {
 
 func TestListModelsUnknownProvider(t *testing.T) {
 	ctx := context.Background()
-	_, err := ListModels(ctx, "nonexistent", "")
+	_, err := ListModels(ctx, "nonexistent", Command{Path: ""})
 	if err == nil {
 		t.Fatal("ListModels(unknown) expected error")
 	}
@@ -971,7 +1007,7 @@ exit 1
 `
 	writeTestExecutable(t, fake, []byte(script))
 
-	models, err := discoverOpenCodeModels(context.Background(), fake)
+	models, err := discoverOpenCodeModels(context.Background(), Command{Path: fake})
 	if err != nil {
 		t.Fatalf("discoverOpenCodeModels: %v", err)
 	}
@@ -1058,7 +1094,7 @@ func TestDiscoverPiModelsRPCThinkingCatalog(t *testing.T) {
 	}
 	fakePath := writeFakePiRPCModelsBinary(t)
 
-	models, err := discoverPiModels(context.Background(), fakePath)
+	models, err := discoverPiModels(context.Background(), Command{Path: fakePath})
 	if err != nil {
 		t.Fatalf("discoverPiModels: %v", err)
 	}
@@ -1119,7 +1155,7 @@ printf '%s\n' 'fallback fallback-model 128K 8K yes no'
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	models, err := discoverPiModels(ctx, fakePath)
+	models, err := discoverPiModels(ctx, Command{Path: fakePath})
 	if err != nil {
 		t.Fatalf("discoverPiModels: %v", err)
 	}
@@ -1146,7 +1182,7 @@ printf '%s\n' 'fallback fallback-model 128K 8K yes no'
 	writeTestExecutable(t, fakePath, []byte(script))
 
 	started := time.Now()
-	models, err := discoverPiModelsWithin(context.Background(), fakePath, 100*time.Millisecond, time.Second)
+	models, err := discoverPiModelsWithin(context.Background(), Command{Path: fakePath}, 100*time.Millisecond, time.Second)
 	elapsed := time.Since(started)
 	if err != nil {
 		t.Fatalf("discoverPiModels: %v", err)
@@ -1294,7 +1330,7 @@ func TestDiscoverPiModelsNonZeroExit(t *testing.T) {
 			fakePath := filepath.Join(t.TempDir(), "pi")
 			writeTestExecutable(t, fakePath, []byte(tc.script))
 
-			models, err := discoverPiModels(context.Background(), fakePath)
+			models, err := discoverPiModels(context.Background(), Command{Path: fakePath})
 			if err != nil {
 				t.Fatalf("discoverPiModels: %v", err)
 			}
@@ -1332,7 +1368,7 @@ func TestDiscoverOpenCodeModelsFallsBackOnVerboseNoise(t *testing.T) {
 	fakePath := filepath.Join(t.TempDir(), "opencode")
 	writeTestExecutable(t, fakePath, []byte(script))
 
-	models, err := discoverOpenCodeModels(context.Background(), fakePath)
+	models, err := discoverOpenCodeModels(context.Background(), Command{Path: fakePath})
 	if err != nil {
 		t.Fatalf("discoverOpenCodeModels: %v", err)
 	}
@@ -1745,9 +1781,9 @@ func TestAntigravityModelSelectionSupported(t *testing.T) {
 	}
 }
 
-// TestParseAntigravityModels covers the `agy models` line-per-name format:
-// each non-blank line becomes a Model whose ID and Label are the verbatim
-// display string `--model` expects, duplicates collapse, and blanks drop.
+// TestParseAntigravityModels covers the legacy single-column `agy models`
+// format (pre-1.1.11): each non-blank tab-free line becomes a Model whose ID
+// and Label are that verbatim value, duplicates collapse, and blanks drop.
 func TestParseAntigravityModels(t *testing.T) {
 	t.Parallel()
 
@@ -1772,6 +1808,32 @@ func TestParseAntigravityModels(t *testing.T) {
 		if !reflect.DeepEqual(got[i], want[i]) {
 			t.Errorf("model[%d] = %+v, want %+v", i, got[i], want[i])
 		}
+	}
+}
+
+// TestParseAntigravityModelsTabSeparated covers the catalog format introduced
+// by agy 1.1.11: the first tab-delimited field is the value accepted by
+// --model, while the second field is the human-readable picker label.
+func TestParseAntigravityModelsTabSeparated(t *testing.T) {
+	t.Parallel()
+
+	out := strings.Join([]string{
+		"gemini-3.6-flash-high\tGemini 3.6 Flash (High)",
+		"claude-opus-4-6-thinking\tClaude Opus 4.6 (Thinking)\tfuture metadata is ignored",
+		"gemini-3.6-flash-high\tDuplicate label is ignored",
+	}, "\n")
+
+	got := parseAntigravityModels(out)
+	want := []Model{
+		{ID: "gemini-3.6-flash-high", Label: "Gemini 3.6 Flash (High)", Provider: "antigravity"},
+		{ID: "claude-opus-4-6-thinking", Label: "Claude Opus 4.6 (Thinking)", Provider: "antigravity"},
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("parseAntigravityModels = %+v, want %+v", got, want)
+	}
+
+	if err := antigravityModelError("gemini-3.6-flash-high", got); err != nil {
+		t.Fatalf("exact model slug from tab-separated catalog was rejected: %v", err)
 	}
 }
 
