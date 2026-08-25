@@ -13,6 +13,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
+	"github.com/multica-ai/multica/server/pkg/dbid"
 )
 
 const agentBuilderInstructions = `You are Multica Agent Builder. Help the user design one practical AI agent through a short conversation.
@@ -121,6 +122,7 @@ func (h *Handler) CreateAgentBuilderSession(w http.ResponseWriter, r *http.Reque
 	}
 
 	session, err := qtx.CreateChatSession(r.Context(), db.CreateChatSessionParams{
+		ID:          dbid.NewV7(),
 		WorkspaceID: workspaceUUID,
 		AgentID:     builder.ID,
 		CreatorID:   ownerUUID,
@@ -128,6 +130,11 @@ func (h *Handler) CreateAgentBuilderSession(w http.ResponseWriter, r *http.Reque
 	})
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create agent builder session")
+		return
+	}
+	session, err = qtx.MarkChatSessionExplicitlyCreated(r.Context(), session.ID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to mark agent builder session explicit")
 		return
 	}
 	if err := tx.Commit(r.Context()); err != nil {
@@ -355,7 +362,7 @@ func (h *Handler) resolveBuilderRuntime(w http.ResponseWriter, r *http.Request, 
 		return db.AgentRuntime{}, false
 	}
 	if !canUseRuntimeForAgent(member, runtime) {
-		writeError(w, http.StatusForbidden, "this runtime is private; only its owner or a workspace admin can use it")
+		writeError(w, http.StatusForbidden, "this runtime is private; only its owner can use it")
 		return db.AgentRuntime{}, false
 	}
 	if runtime.Status != "online" {
