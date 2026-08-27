@@ -15,13 +15,15 @@
 --   - Partial indexes (WHERE ...) keep the indexes small
 --
 -- Renumbered from 164 to 225 in the 2026-07-26 upstream sync (164_attachment_task_id
--- already existed upstream, so this fork-owned migration had to move), and
--- again from 225 to 273 in the 2026-08-10 upstream sync (upstream landed its
--- own 225_chat_message_channel_media_pending). The new prefix changes the
--- schema_migrations key, so the runner re-applies this on databases that
--- already applied it as 164 or 225; ADD COLUMN IF NOT EXISTS makes that
--- idempotent (mirrors upstream's 164_attachment_task_id IF NOT EXISTS pattern
--- used for the same self-heal reason — see comment in that file).
+-- already existed upstream, so this fork-owned migration had to move), then
+-- from 225 to 273 in the 2026-08-10 upstream sync (upstream landed its own
+-- 225_chat_message_channel_media_pending), and again from 273 to 433 in the
+-- 2026-08-25 upstream sync (upstream landed its own 273_agent_task_queue_runtime_id_index).
+-- The prefix change makes the schema_migrations key move, so the runner
+-- re-applies this on databases that already applied it as 164 / 225 / 273;
+-- ADD COLUMN IF NOT EXISTS makes that idempotent (mirrors upstream's
+-- 164_attachment_task_id IF NOT EXISTS pattern used for the same self-heal
+-- reason — see comment in that file).
 
 ALTER TABLE "user"
     ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT false,

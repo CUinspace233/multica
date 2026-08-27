@@ -7,13 +7,15 @@ ALTER TABLE runtime_profile DROP CONSTRAINT IF EXISTS runtime_profile_protocol_f
 -- historical Gemini row it intentionally tolerated does not block the upgrade.
 --
 -- Renumbered from 163 to 224 in the 2026-07-26 upstream sync (163_agent_builder
--- already existed upstream, so this fork-owned migration had to move), and
--- again from 224 to 272 in the 2026-08-10 upstream sync (upstream landed its
--- own 224_agent_task_session_rollout_missing). The prefix changes the
--- schema_migrations key, so the runner re-applies this on databases that
--- already applied it as 163 or 224; the EXCEPTION guard makes that idempotent
--- (mirrors upstream's 164_attachment_task_id IF NOT EXISTS pattern used for
--- the same self-heal reason — see comment in that file).
+-- already existed upstream, so this fork-owned migration had to move), then
+-- from 224 to 272 in the 2026-08-10 upstream sync (upstream landed its own
+-- 224_agent_task_session_rollout_missing), and again from 272 to 432 in the
+-- 2026-08-25 upstream sync (upstream landed its own 272_rollup_task_usage_hourly_xact_lock).
+-- The prefix changes the schema_migrations key, so the runner re-applies this
+-- on databases that already applied it as 163 / 224 / 272; the EXCEPTION guard
+-- makes that idempotent (mirrors upstream's 164_attachment_task_id IF NOT
+-- EXISTS pattern used for the same self-heal reason — see comment in that
+-- file).
 DO $$
 BEGIN
     ALTER TABLE runtime_profile ADD CONSTRAINT runtime_profile_protocol_family_check

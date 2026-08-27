@@ -129,7 +129,7 @@ var concurrentIndexCleanups = map[string]string{
 	"115_agent_runtime_last_seen_at_index":                      "idx_agent_runtime_last_seen_at",
 	"119_user_created_at_index":                                 "idx_user_created_at",
 	"125_agent_task_queue_dispatched_prepare_index":             "idx_agent_task_queue_dispatched_prepare",
-	"135_comment_workspace_index":                               "idx_comment_workspace",
+	"434_comment_workspace_index":                               "idx_comment_workspace",
 	"138_issue_title_trgm_index":                                "idx_issue_title_trgm",
 	"139_issue_description_trgm_index":                          "idx_issue_description_trgm",
 	"140_comment_content_trgm_index":                            "idx_comment_content_trgm",

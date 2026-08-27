@@ -41,6 +41,13 @@
 -- blocking writes on the hot comment table while the index builds; this
 -- file must stay single-statement because Postgres rejects CREATE INDEX
 -- CONCURRENTLY in a transaction or multi-command string.
+--
+-- Renumbered 135 → 226 → 274 → 434 across the 2026-07-26,
+-- 2026-08-10 and 2026-08-25 upstream syncs (upstream landed 135 in
+-- 2026-07-26, then 226_chat_message_quick_actions and 274_task_token_workspace_id_index
+-- in the subsequent syncs; CREATE INDEX CONCURRENTLY IF NOT EXISTS makes
+-- the rerun idempotent on databases that already applied it under the
+-- old prefix).
 
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_comment_workspace
     ON comment (workspace_id);
