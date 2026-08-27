@@ -27,6 +27,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"sync"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -43,12 +44,13 @@ import (
 // outboundQueries is the slice of generated queries the WeCom outbound
 // subscriber needs. *db.Queries satisfies it.
 type outboundQueries interface {
-	GetChannelChatSessionBindingBySession(ctx context.Context, arg db.GetChannelChatSessionBindingBySessionParams) (db.ChannelChatSessionBinding, error)
+	GetChannelTaskDelivery(ctx context.Context, taskID pgtype.UUID) (db.ChannelTaskDelivery, error)
 	GetAgentTask(ctx context.Context, id pgtype.UUID) (db.AgentTaskQueue, error)
 	TaskHasChannelIngestedMessages(ctx context.Context, taskID pgtype.UUID) (bool, error)
 	GetChannelInstallation(ctx context.Context, arg db.GetChannelInstallationParams) (db.ChannelInstallation, error)
 	FindChannelBindingForMember(ctx context.Context, arg db.FindChannelBindingForMemberParams) (db.ChannelUserBinding, error)
 	GetWorkspace(ctx context.Context, id pgtype.UUID) (db.Workspace, error)
+	ListAttachmentsByChatMessage(ctx context.Context, arg db.ListAttachmentsByChatMessageParams) ([]db.Attachment, error)
 }
 
 // Outbound delivers an agent's chat reply back to WeCom over the same
@@ -58,6 +60,38 @@ type Outbound struct {
 	q       outboundQueries
 	senders *sendersRegistry
 	logger  *slog.Logger
+
+	// objects is the deployment's object storage, or nil when there is none.
+	// Non-nil is what turns file delivery on (outbound_media.go).
+	objects mediaObjectStore
+
+	// spawn runs an attachment delivery. A field rather than a bare `go` so a
+	// test can run it inline and observe the result deterministically.
+	spawn func(func())
+
+	// Two counters bound attachment delivery, and they are two because one
+	// cannot be in both places at once.
+	//
+	// admittedAttachments counts goroutines this subscriber has started and
+	// not yet seen return. It is claimed before the spawn, so it bounds the
+	// attachment lookup each goroutine runs as well as the goroutine itself.
+	// Nothing is known about the turn at that point, so exceeding it can only
+	// be logged.
+	//
+	// pendingAttachments counts deliveries that have looked the turn up and
+	// found a file. It is claimed after the lookup, which is what lets a
+	// delivery refused for want of capacity be reported to the user without
+	// ever warning about a file that never existed.
+	//
+	// The admitted cap is deliberately the larger of the two, so that a
+	// backlog of turns that DO carry a file fills the pending cap first and is
+	// shed on the path that can say what was dropped. Reaching the admitted cap
+	// does not imply the pending cap is full: admission is held for a
+	// goroutine's whole life, including its lookup and including turns that
+	// turn out to carry no file, and those never claim a pending slot at all.
+	pendingMu           sync.Mutex
+	pendingAttachments  int
+	admittedAttachments int
 }
 
 // NewOutbound builds the WeCom outbound subscriber. senders is the same
@@ -65,11 +99,23 @@ type Outbound struct {
 // built with — reply delivery goes through the live wsSender for the
 // binding's installation, so a session whose Supervisor lost the lease
 // mid-flight silently drops rather than opening a second connection.
-func NewOutbound(q outboundQueries, senders *sendersRegistry, logger *slog.Logger) *Outbound {
+//
+// WithAttachments is the one option: pass the deployment's object storage and
+// the files an agent produced are delivered into the chat behind the answer.
+func NewOutbound(q outboundQueries, senders *sendersRegistry, logger *slog.Logger, opts ...OutboundOption) *Outbound {
 	if logger == nil {
 		logger = slog.Default()
 	}
-	return &Outbound{q: q, senders: senders, logger: logger}
+	o := &Outbound{
+		q:       q,
+		senders: senders,
+		logger:  logger,
+		spawn:   func(f func()) { go f() },
+	}
+	for _, opt := range opts {
+		opt(o)
+	}
+	return o
 }
 
 // Register subscribes to the chat-done event on the bus.
@@ -98,19 +144,13 @@ func (o *Outbound) processEvent(ctx context.Context, e events.Event) error {
 		// Issue / autopilot tasks carry no chat_session.
 		return nil
 	}
-	binding, err := o.q.GetChannelChatSessionBindingBySession(ctx, db.GetChannelChatSessionBindingBySessionParams{
-		ChatSessionID: sessionID,
-		ChannelType:   channelTypeWecom,
-	})
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return nil // not a wecom session (Slack / Lark / web-only)
-		}
-		return fmt.Errorf("wecom: lookup chat binding: %w", err)
-	}
+	// An empty completion normally ends the turn here. It does not when the
+	// agent produced a file and said nothing about it: the platform writes an
+	// assistant message for exactly that case, and returning now would throw
+	// the work away.
 	content := chatDoneContent(e.Payload)
-	if content == "" {
-		return nil // nothing to say (empty completion)
+	if content == "" && !o.mayCarryAttachments(e) {
+		return nil // nothing to say, nothing to send
 	}
 	// Only bound, non-empty completions reach here, so classify the task
 	// origin before loading credentials or sending. A question asked in the
@@ -130,6 +170,17 @@ func (o *Outbound) processEvent(ctx context.Context, e events.Event) error {
 	if !ok {
 		return nil
 	}
+	delivery, err := o.q.GetChannelTaskDelivery(ctx, taskID)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil
+		}
+		return fmt.Errorf("wecom: lookup task delivery: %w", err)
+	}
+	if delivery.ChannelType != channelTypeWecom {
+		return nil
+	}
+	binding := wecomBindingFromTaskDelivery(delivery)
 	task, err := o.q.GetAgentTask(ctx, taskID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -172,7 +223,32 @@ func (o *Outbound) processEvent(ctx context.Context, e events.Event) error {
 		return errors.New("wecom: connection not ready on this replica")
 	}
 	chatType := aibotChatTypeFromChannel(channel.ChatType(binding.ChatType))
-	return sender.sendTextCtx(ctx, binding.ChannelChatID, chatType, content)
+	// Words first. An empty completion reaches here only because a file is
+	// bound to it, and an empty markdown bubble ahead of that file would be
+	// noise the user has to scroll past.
+	if content != "" {
+		if err := sender.sendTextCtx(ctx, binding.ChannelChatID, chatType, content); err != nil {
+			return err
+		}
+	}
+	// Then whatever the agent produced alongside them, as its own message — a
+	// WeCom reply cannot carry a file inline.
+	o.deliverAttachments(e, attachmentTarget{
+		InstallationID: binding.InstallationID,
+		ChatID:         binding.ChannelChatID,
+		ChatType:       chatType,
+	})
+	return nil
+}
+
+func wecomBindingFromTaskDelivery(delivery db.ChannelTaskDelivery) db.ChannelChatSessionBinding {
+	return db.ChannelChatSessionBinding{
+		ID: delivery.BindingID, InstallationID: delivery.InstallationID,
+		ChannelType: delivery.ChannelType, ChannelChatID: delivery.ChannelChatID,
+		ChatType:      delivery.ChatType,
+		LastMessageID: delivery.ChannelMessageID, LastThreadID: delivery.ChannelThreadID,
+		RouteRevision: delivery.RouteRevision, Config: delivery.Config,
+	}
 }
 
 // chatDoneTaskID recovers the task id an EventChatDone belongs to. The
