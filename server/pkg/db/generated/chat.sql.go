@@ -2487,9 +2487,8 @@ FOR KEY SHARE
 // -> generation order before the later TouchChatSession update.
 func (q *Queries) LockChatSessionForAppend(ctx context.Context, id pgtype.UUID) (pgtype.UUID, error) {
 	row := q.db.QueryRow(ctx, lockChatSessionForAppend, id)
-	var id_2 pgtype.UUID
-	err := row.Scan(&id_2)
-	return id_2, err
+	err := row.Scan(&id)
+	return id, err
 }
 
 const lockChatSessionForDelete = `-- name: LockChatSessionForDelete :one
