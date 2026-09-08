@@ -941,8 +941,8 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
         <SidebarFooter className="p-2">
           <SidebarMenu className="gap-0.5">
             {utilityNav.map((item) => {
-              const href = p[item.key]();
-              const Icon = routeIconForPath(href);
+              const href = p ? p[item.key]() : "";
+              const Icon = p ? routeIconForPath(href) : null;
               return (
                 <SidebarMenuItem key={item.key}>
                   <SidebarMenuButton
@@ -950,7 +950,7 @@ export function AppSidebar({ topSlot, searchSlot, headerClassName, headerStyle }
                     render={<AppLink href={href} />}
                     className={NAV_ITEM_CLASS_NAME}
                   >
-                    <Icon />
+                    {Icon && <Icon />}
                     <span>{t(($) => $.nav[item.labelKey])}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
