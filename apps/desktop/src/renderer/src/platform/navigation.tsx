@@ -5,7 +5,7 @@ import {
   type NavigationAdapter,
 } from "@multica/views/navigation";
 import { useAuthStore } from "@multica/core/auth";
-import { isReservedSlug } from "@multica/core/paths";
+import { isReservedSlug, paths } from "@multica/core/paths";
 import {
   useTabStore,
   getActiveTab,
@@ -86,13 +86,18 @@ function tryRouteToOverlay(path: string): boolean {
  * invite-accept flow — they all call `useNavigation().push(path)` with a
  * full workspace URL, and on desktop we translate "target slug differs
  * from active" into "switch the tab-group that's visible in the TabBar".
+ *
+ * The target's bare Issues root (what the workspace switchers send, and where
+ * web lands) resumes the workspace's last active tab instead, or Issues if it
+ * has none. Any deeper path opens exactly that path.
  */
 function tryRouteToOtherWorkspace(path: string): boolean {
   const targetSlug = extractWorkspaceSlug(path);
   if (!targetSlug) return false;
   const { activeWorkspaceSlug, switchWorkspace } = useTabStore.getState();
   if (targetSlug === activeWorkspaceSlug) return false;
-  switchWorkspace(targetSlug, path);
+  const resume = path === paths.workspace(targetSlug).issues();
+  switchWorkspace(targetSlug, resume ? undefined : path);
   return true;
 }
 
@@ -180,7 +185,8 @@ export function DesktopNavigationProvider({
     const { pathname, suffix } = splitTabUrl(url);
     const hashIdx = suffix.indexOf("#");
     const search = hashIdx === -1 ? suffix : suffix.slice(0, hashIdx);
-    return { pathname, search };
+    const hash = hashIdx === -1 ? "" : suffix.slice(hashIdx);
+    return { pathname, search, hash };
   }, [activeUrl]);
 
   const adapter: NavigationAdapter = useMemo(
@@ -218,6 +224,9 @@ export function DesktopNavigationProvider({
       },
       pathname: location.pathname,
       searchParams: new URLSearchParams(location.search),
+      // The tab's URL is the only place the fragment survives on desktop: the
+      // renderer's own `window.location` is the packaged file:// page.
+      hash: location.hash,
       openInNewTab: (
         path: string,
         title?: string,
