@@ -1,0 +1,92 @@
+{
+  "title": "Admin",
+  "page_title": "Administration de l'instance",
+  "page_subtitle": "Gérez les utilisateurs, les espaces de travail, les runtimes de daemon et la liste d'autorisation d'inscription de cette instance.",
+  "back_to_workspaces": "Retour aux espaces de travail",
+  "groups": {
+    "identity": "Instance",
+    "access": "Contrôle d'accès"
+  },
+  "tabs": {
+    "users": "Utilisateurs",
+    "workspaces": "Espaces de travail",
+    "runtimes": "Runtimes",
+    "access": "Accès"
+  },
+  "status": {
+    "instance": "Instance",
+    "uptime": "Disponibilité",
+    "signup": "Inscription",
+    "signup_open": "Ouverte",
+    "signup_closed": "Fermée",
+    "allowlist": "Liste d'autorisation",
+    "runtimes": "Runtimes",
+    "last_action": "Dernière action admin",
+    "last_action_never": "jamais"
+  },
+  "users": {
+    "search_placeholder": "Rechercher par nom ou e-mail",
+    "no_users": "Aucun utilisateur pour l'instant.",
+    "role_superuser": "Superutilisateur",
+    "role_member": "Membre",
+    "status_active": "Actif",
+    "status_disabled": "Désactivé",
+    "promote": "Promouvoir superutilisateur",
+    "demote": "Rétrograder en membre",
+    "disable": "Désactiver le compte",
+    "enable": "Activer le compte",
+    "copy_id": "Copier l'ID",
+    "copy_id_done": "ID copié",
+    "you_badge": "vous",
+    "actions": "Actions",
+    "toast_promoted": "Promu superutilisateur",
+    "toast_demoted": "Rétrogradé en membre",
+    "toast_disabled": "Compte désactivé",
+    "toast_enabled": "Compte activé",
+    "toast_failed": "L'action a échoué",
+    "more_actions_aria": "Plus d'actions",
+    "cannot_disable_self_title": "Désactiver votre propre compte ?",
+    "cannot_disable_self_description": "Vous désactiver vous empêchera de vous connecter. Demandez à un autre superutilisateur de vous réactiver.",
+    "confirm_disable_self": "Désactiver quand même",
+    "cancel": "Annuler"
+  },
+  "workspaces": {
+    "search_placeholder": "Rechercher par nom ou slug",
+    "no_workspaces": "Aucun espace de travail pour l'instant.",
+    "members_one": "{{count}} membre",
+    "members_other": "{{count}} membres",
+    "issues_one": "{{count}} tâche",
+    "issues_other": "{{count}} tâches"
+  },
+  "runtimes": {
+    "search_placeholder": "Rechercher par nom ou propriétaire",
+    "no_runtimes": "Aucun runtime de daemon enregistré.",
+    "provider": "Fournisseur",
+    "status_online": "En ligne",
+    "status_offline": "Hors ligne",
+    "owner": "Propriétaire",
+    "last_seen": "Vu pour la dernière fois",
+    "last_seen_never": "jamais"
+  },
+  "access": {
+    "emails_title": "E-mails autorisés",
+    "emails_desc": "Les adresses de cette liste peuvent se connecter même lorsque l'inscription est fermée.",
+    "domains_title": "Domaines e-mail autorisés",
+    "domains_desc": "Toute personne disposant d'une adresse sur l'un de ces domaines peut se connecter.",
+    "email_placeholder": "alice@acme.com",
+    "domain_placeholder": "acme.com",
+    "add_email": "Ajouter un e-mail",
+    "add_domain": "Ajouter un domaine",
+    "no_emails": "Aucun e-mail spécifique autorisé.",
+    "no_domains": "Aucune liste de domaines. Tout le monde peut s'inscrire si l'inscription est ouverte.",
+    "invalid_email": "Cela ne ressemble pas à une adresse e-mail.",
+    "invalid_domain": "Cela ne ressemble pas à un domaine (essayez acme.com).",
+    "toast_added_email": "E-mail ajouté",
+    "toast_added_domain": "Domaine ajouté",
+    "toast_removed": "Supprimé",
+    "toast_failed": "L'action a échoué",
+    "lockout_title": "Vider la liste d'autorisation",
+    "lockout_description": "Supprimer la dernière entrée bloquera tout le monde sauf les comptes existants. Continuer ?",
+    "lockout_confirm": "Vider la liste"
+  }
+}
